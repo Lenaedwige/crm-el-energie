@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EL-ÉNERGIE CRM v7 - Synchronisé Sheets</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0F4761 0%, #1a5a7a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+        .header {
+            background: linear-gradient(135deg, #0F4761 0%, #1a5a7a 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+        .header .version {
+            background: #F37322;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .status-bar {
+            background: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #FEF0E7;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+        .status-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-badge.online { background: #28a745; }
+        .status-badge.offline { background: #dc3545; }
+        .status-badge.pending { background: #ffc107; }
+        .content {
+            display: flex;
+            min-height: 600px;
+        }
+        .sidebar {
+            width: 250px;
+            background: #f9f9f9;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .nav-section {
+            margin-bottom: 30px;
+        }
+        .nav-label {
+            color: #0F4761;
+            font-weight: bold;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.95em;
+            transition: all 0.2s;
+            color: #333;
+            font-weight: 500;
+        }
+        .nav-button:hover {
+            background: #FEF0E7;
+            border-color: #F37322;
+        }
+        .nav-button.active {
+            background: #F37322;
+            color: white;
+            border-color: #F37322;
+        }
+        .separator {
+            height: 1px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+        .main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #fafafa;
+        }
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .filters {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .filter-label {
+            font-weight: bold;
+            color: #0F4761;
+            font-size: 0.95em;
+        }
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #F37322;
+            box-shadow: 0 0 5px rgba(243, 115, 34, 0.2);
+        }
+        button {
+            padding: 10px 20px;
+            background: #0F4761;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #1a5a7a;
+        }
+        button.primary {
+            background: #F37322;
+        }
+        button.primary:hover {
+            background: #d65a1a;
+        }
+        button.small {
+            padding: 6px 12px;
+            font-size: 0.85em;
+        }
+        .table-container {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #0F4761;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .status-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .status-tag.prospect { background: #e7f3ff; color: #0051ba; }
+        .status-tag.encours { background: #fff3cd; color: #856404; }
+        .status-tag.facture { background: #cfe2ff; color: #084298; }
+        .status-tag.paye { background: #d1e7dd; color: #0f5132; }
+        .status-tag.termine { background: #d1e7dd; color: #0f5132; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 90%;
+        }
+        .modal-content h2 {
+            color: #0F4761;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #0F4761;
+            font-size: 0.95em;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        .button-cancel {
+            background: #ccc;
+        }
+        .button-cancel:hover {
+            background: #999;
+        }
+        .badge-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            background: #FEF0E7;
+            color: #F37322;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .dashboard-card {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #F37322;
+        }
+        .dashboard-card h3 {
+            color: #0F4761;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .dashboard-card .value {
+            font-size: 2em;
+            color: #F37322;
+            font-weight: bold;
+        }
+        .sync-info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        .error-msg {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .success-msg {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            margin-left: 5px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #F37322;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .content { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ddd; }
+            .header { flex-direction: column; text-align: center; }
+            .status-bar { flex-direction: column; }
+            .filters { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div>
+                <h1>EL-ÉNERGIE CRM</h1>
+                <p style="margin: 5px 0; font-size: 0.95em; opacity: 0.9;">Gestion clients centralisée</p>
+            </div>
+            <div class="version">v7 • SYNCHRONISÉ SHEETS</div>
+        </div>
+
+        <!-- STATUS BAR -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-badge online"></span>
+                <span>Google Sheets : <strong id="sheetsStatus">Prêt à connecter</strong></span>
+            </div>
+            <div class="status-item">
+                <span>Utilisateur : <strong id="userDisplay">Connexion</strong></span>
+            </div>
+            <div class="status-item">
+                <button class="small" onclick="showSyncStatus()">Infos Sync</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="content">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <div class="nav-section">
+                    <div class="nav-label">Authentification</div>
+                    <button class="nav-button" onclick="showAuth()">🔐 Connecter Sheets</button>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Mes Clients</div>
+                    <button class="nav-button active" onclick="switchView('dashboard')">📊 Tableau Bord</button>
+                    <button class="nav-button" onclick="switchView('bilans')">📋 Bilans</button>
+                    <button class="nav-button" onclick="switchView('formations')">🎓 Formations</button>
+                    <button class="nav-button" onclick="switchView('seminaires')">🎯 Séminaires</button>
+                    <button class="nav-button" onclick="switchView('animations')">🎭 Animations</button>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Gestion</div>
+                    <button class="nav-button" onclick="switchView('suivi-docs')">📄 Suivi Documents</button>
+                    <button class="nav-button" onclick="showExport()">💾 Export JSON</button>
+                </div>
+
+                <div class="separator"></div>
+
+                <div style="font-size: 0.85em; color: #666; line-height: 1.6;">
+                    <strong>Guide :</strong><br>
+                    • Connecte Sheets d'abord<br>
+                    • Crée clients dans les onglets<br>
+                    • Clic "Générer docs"<br>
+                    • Vérif Drive auto<br><br>
+                    <strong>Support :</strong> el.energie@orange.fr
+                </div>
+            </div>
+
+            <!-- MAIN VIEW -->
+            <div class="main">
+                <!-- DASHBOARD -->
+                <div id="dashboard" class="view active">
+                    <h2>Tableau Bord</h2>
+                    <div id="authAlert" style="display:none;" class="error-msg">
+                        📌 Connecte d'abord Google Sheets pour voir les données.
+                    </div>
+                    <div id="dashboardContent">
+                        <div class="sync-info">
+                            Chargement des données depuis Sheets...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BILANS -->
+                <div id="bilans" class="view">
+                    <h2>Bilans de Compétences</h2>
+                    <div class="filters">
+                        <button class="primary" onclick="openFormModal('bilan')">+ Nouveau Bilan</button>
+                        <div class="filter-group">
+                            <span class="filter-label">Filtrer :</span>
+                            <select id="bilanFilter" onchange="filterData('bilans')">
+                                <option value="tous">Tous</option>
+                                <option value="Edwige">Edwige</option>
+                                <option value="Florence">Florence</option>
+                            </select>
+                            <select id="bilanStatus" onchange="filterData('bilans')">
+                                <option value="">Tous statuts</option>
+                                <option value="Prospect">Prospect</option>
+                                <option value="En cours">En cours</option>
+                                <option value="Facturé">Facturé</option>
+                                <option value="Payé">Payé</option>
+                                <option value="Terminé">Terminé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="bilansTable" class="table-container">
+                        <div class="empty-state">
+                            <h3>Aucun bilan</h3>
+                            <p>Clique sur "+ Nouveau Bilan" pour commencer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORMATIONS -->
+                <div id="formations" class="view">
+                    <h2>Formations</h2>
+                    <div class="filters">
+                        <button class="primary" onclick="openFormModal('formation')">+ Nouvelle Formation</button>
+                        <div class="filter-group">
+                            <span class="filter-label">Filtrer :</span>
+                            <select id="formationFilter" onchange="filterData('formations')">
+                                <option value="tous">Tous</option>
+                                <option value="Edwige">Edwige</option>
+                                <option value="Florence">Florence</option>
+                            </select>
+                            <select id="formationStatus" onchange="filterData('formations')">
+                                <option value="">Tous statuts</option>
+                                <option value="Prospect">Prospect</option>
+                                <option value="En cours">En cours</option>
+                                <option value="Facturé">Facturé</option>
+                                <option value="Payé">Payé</option>
+                                <option value="Terminé">Terminé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="formationsTable" class="table-container">
+                        <div class="empty-state">
+                            <h3>Aucune formation</h3>
+                            <p>Clique sur "+ Nouvelle Formation" pour commencer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SÉMINAIRES -->
+                <div id="seminaires" class="view">
+                    <h2>Séminaires</h2>
+                    <div class="filters">
+                        <button class="primary" onclick="openFormModal('seminaire')">+ Nouveau Séminaire</button>
+                        <div class="filter-group">
+                            <span class="filter-label">Filtrer :</span>
+                            <select id="seminaireFilter" onchange="filterData('seminaires')">
+                                <option value="tous">Tous</option>
+                                <option value="Edwige">Edwige</option>
+                                <option value="Florence">Florence</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="seminairesTable" class="table-container">
+                        <div class="empty-state">
+                            <h3>Aucun séminaire</h3>
+                            <p>Clique sur "+ Nouveau Séminaire" pour commencer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ANIMATIONS -->
+                <div id="animations" class="view">
+                    <h2>Animations</h2>
+                    <div class="filters">
+                        <button class="primary" onclick="openFormModal('animation')">+ Nouvelle Animation</button>
+                        <div class="filter-group">
+                            <span class="filter-label">Filtrer :</span>
+                            <select id="animationFilter" onchange="filterData('animations')">
+                                <option value="tous">Tous</option>
+                                <option value="Edwige">Edwige</option>
+                                <option value="Florence">Florence</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="animationsTable" class="table-container">
+                        <div class="empty-state">
+                            <h3>Aucune animation</h3>
+                            <p>Clique sur "+ Nouvelle Animation" pour commencer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUIVI DOCUMENTS -->
+                <div id="suivi-docs" class="view">
+                    <h2>Suivi Documents</h2>
+                    <div class="filters">
+                        <div class="filter-group">
+                            <span class="filter-label">Type :</span>
+                            <select id="docTypeFilter" onchange="filterDocuments()">
+                                <option value="">Tous types</option>
+                                <option value="Bilans">Bilans</option>
+                                <option value="Formations">Formations</option>
+                                <option value="Séminaires">Séminaires</option>
+                                <option value="Animations">Animations</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="docsTable" class="table-container">
+                        <div class="empty-state">
+                            <h3>Aucun document</h3>
+                            <p>Les documents apparaissent ici une fois créés</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AUTHENTIFICATION -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2>Connecter Google Sheets</h2>
+            <div class="form-group">
+                <label>ID Google Sheet :</label>
+                <input type="text" id="sheetsId" placeholder="ex: 1nD757djE_e0ewIDzRdO1vSmpjsh95Ib_">
+                <small style="color: #999; display: block; margin-top: 5px;">
+                    Copie l'ID de l'URL : https://docs.google.com/spreadsheets/d/<strong>CECI_EST_L_ID</strong>/edit
+                </small>
+            </div>
+            <div class="form-group">
+                <label>Clé API Google :</label>
+                <input type="password" id="apiKey" placeholder="AIzaSy...">
+                <small style="color: #999; display: block; margin-top: 5px;">
+                    Crée une clé API via Google Cloud Console (lecture Sheets)
+                </small>
+            </div>
+            <div class="form-group">
+                <label>Ton prénom (pour les logs) :</label>
+                <input type="text" id="userName" placeholder="Edwige">
+            </div>
+            <div class="modal-footer">
+                <button class="button-cancel" onclick="closeModal('authModal')">Annuler</button>
+                <button class="primary" onclick="connectSheets()">Connecter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORMULAIRE CLIENT -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <h2 id="formTitle">Nouveau Client</h2>
+            <form id="clientForm" onsubmit="saveClient(event)">
+                <div class="form-group">
+                    <label>Nom Client :</label>
+                    <input type="text" name="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email :</label>
+                    <input type="email" name="clientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Téléphone :</label>
+                    <input type="tel" name="clientPhone">
+                </div>
+                <div class="form-group" id="typeField" style="display:none;">
+                    <label>Type Prestation :</label>
+                    <select name="prestationType" id="prestationType">
+                        <option value="Bilan Essentiel">Bilan Essentiel</option>
+                        <option value="Bilan Premium">Bilan Premium</option>
+                        <option value="GDI">GDI</option>
+                        <option value="QVCT">QVCT</option>
+                        <option value="DISC">DISC</option>
+                        <option value="Autre">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Montant HT (€) :</label>
+                    <input type="number" name="montantHT" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Montant TTC (€) :</label>
+                    <input type="number" name="montantTTC" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Statut :</label>
+                    <select name="statut">
+                        <option value="Prospect">Prospect</option>
+                        <option value="En cours">En cours</option>
+                        <option value="Facturé">Facturé</option>
+                        <option value="Payé">Payé</option>
+                        <option value="Terminé">Terminé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notes :</label>
+                    <textarea name="notes" placeholder="Notes internes"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button-cancel" onclick="closeModal('formModal')">Annuler</button>
+                    <button type="submit" class="primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SYNC INFO -->
+    <div id="syncModal" class="modal">
+        <div class="modal-content">
+            <h2>Infos Synchronisation</h2>
+            <div id="syncDetails" style="line-height: 2; color: #666;">
+                Chargement...
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('syncModal')">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIG & STATE ============
+        let sheetsId = localStorage.getItem('sheetsId') || '';
+        let apiKey = localStorage.getItem('apiKey') || '';
+        let userName = localStorage.getItem('userName') || 'Utilisateur';
+        let data = {
+            bilans: [],
+            formations: [],
+            seminaires: [],
+            animations: []
+        };
+        let lastSyncTime = null;
+        let currentFormType = null;
+
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserDisplay();
+            if (!sheetsId || !apiKey) {
+                document.getElementById('authAlert').style.display = 'block';
+            } else {
+                loadFromSheets();
+                setInterval(syncSheets, 30000); // Sync toutes les 30s
+            }
+        });
+
+        // ============ AUTHENTIFICATION ============
+        function showAuth() {
+            document.getElementById('sheetsId').value = sheetsId;
+            document.getElementById('apiKey').value = apiKey;
+            document.getElementById('userName').value = userName;
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function connectSheets() {
+            sheetsId = document.getElementById('sheetsId').value.trim();
+            apiKey = document.getElementById('apiKey').value.trim();
+            userName = document.getElementById('userName').value.trim() || 'Utilisateur';
+
+            if (!sheetsId || !apiKey) {
+                alert('ID Sheets et clé API requis');
+                return;
+            }
+
+            localStorage.setItem('sheetsId', sheetsId);
+            localStorage.setItem('apiKey', apiKey);
+            localStorage.setItem('userName', userName);
+
+            updateUserDisplay();
+            closeModal('authModal');
+            document.getElementById('authAlert').style.display = 'none';
+            loadFromSheets();
+            setInterval(syncSheets, 30000);
+        }
+
+        function updateUserDisplay() {
+            document.getElementById('userDisplay').textContent = userName;
+            if (sheetsId && apiKey) {
+                document.getElementById('sheetsStatus').textContent = 'Connecté ✓';
+            }
+        }
+
+        // ============ NAVIGATION ============
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (viewName === 'dashboard') {
+                renderDashboard();
+            }
+        }
+
+        // ============ MODAL MANAGEMENT ============
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openFormModal(type) {
+            currentFormType = type;
+            const titles = {
+                bilan: 'Nouveau Bilan',
+                formation: 'Nouvelle Formation',
+                seminaire: 'Nouveau Séminaire',
+                animation: 'Nouvelle Animation'
+            };
+            document.getElementById('formTitle').textContent = titles[type];
+            document.getElementById('prestationType').value = type === 'bilan' ? 'Bilan Essentiel' : 'Formation';
+            document.getElementById('typeField').style.display = type === 'bilan' ? 'block' : 'none';
+            document.getElementById('clientForm').reset();
+            document.getElementById('formModal').classList.add('active');
+        }
+
+        // ============ GOOGLE SHEETS API ============
+        async function loadFromSheets() {
+            if (!sheetsId || !apiKey) return;
+
+            try {
+                const ranges = ['BILANS!A:S', 'FORMATIONS!A:S', 'SEMINAIRES!A:L', 'ANIMATIONS!A:L'];
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values:batchGet?ranges=${ranges.join('&ranges=')}&key=${apiKey}`;
+
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.valueRanges) {
+                    parseSheetData(result.valueRanges);
+                    lastSyncTime = new Date();
+                    renderDashboard();
+                }
+            } catch (error) {
+                console.error('Erreur lecture Sheets:', error);
+                document.getElementById('sheetsStatus').textContent = 'Erreur connexion';
+            }
+        }
+
+        function parseSheetData(valueRanges) {
+            // Parse BILANS
+            if (valueRanges[0]?.values?.length > 1) {
+                data.bilans = valueRanges[0].values.slice(1).map((row, idx) => ({
+                    id: row[0] || `B${idx}`,
+                    clientName: row[1] || '',
+                    clientEmail: row[2] || '',
+                    clientPhone: row[3] || '',
+                    prestationType: row[4] || '',
+                    montantHT: parseFloat(row[5]) || 0,
+                    montantTTC: parseFloat(row[6]) || 0,
+                    statut: row[7] || 'Prospect',
+                    createur: row[8] || 'Edwige',
+                    dateCreation: row[9] || new Date().toLocaleDateString()
+                })).filter(r => r.clientName);
+            }
+
+            // Parse FORMATIONS
+            if (valueRanges[1]?.values?.length > 1) {
+                data.formations = valueRanges[1].values.slice(1).map((row, idx) => ({
+                    id: row[0] || `F${idx}`,
+                    clientName: row[1] || '',
+                    clientEmail: row[2] || '',
+                    prestationType: row[3] || '',
+                    montantHT: parseFloat(row[4]) || 0,
+                    montantTTC: parseFloat(row[5]) || 0,
+                    statut: row[6] || 'Prospect',
+                    createur: row[7] || 'Edwige',
+                    dateDebut: row[8] || '',
+                    dateFin: row[9] || ''
+                })).filter(r => r.clientName);
+            }
+
+            // Parse SÉMINAIRES
+            if (valueRanges[2]?.values?.length > 1) {
+                data.seminaires = valueRanges[2].values.slice(1).map((row, idx) => ({
+                    id: row[0] || `S${idx}`,
+                    titre: row[1] || '',
+                    dateSeminaire: row[2] || '',
+                    lieu: row[3] || '',
+                    montantHT: parseFloat(row[4]) || 0,
+                    montantTTC: parseFloat(row[5]) || 0,
+                    createur: row[6] || 'Edwige'
+                })).filter(r => r.titre);
+            }
+
+            // Parse ANIMATIONS
+            if (valueRanges[3]?.values?.length > 1) {
+                data.animations = valueRanges[3].values.slice(1).map((row, idx) => ({
+                    id: row[0] || `A${idx}`,
+                    clientName: row[1] || '',
+                    typeAnimation: row[2] || '',
+                    dateAnimation: row[3] || '',
+                    montantHT: parseFloat(row[4]) || 0,
+                    montantTTC: parseFloat(row[5]) || 0,
+                    statut: row[6] || 'Prospect',
+                    createur: row[7] || 'Edwige'
+                })).filter(r => r.clientName);
+            }
+        }
+
+        function syncSheets() {
+            if (sheetsId && apiKey) {
+                loadFromSheets();
+            }
+        }
+
+        // ============ SAVE CLIENT ============
+        async function saveClient(event) {
+            event.preventDefault();
+
+            const form = new FormData(event.target);
+            const newRecord = {
+                clientName: form.get('clientName'),
+                clientEmail: form.get('clientEmail'),
+                clientPhone: form.get('clientPhone'),
+                prestationType: form.get('prestationType'),
+                montantHT: parseFloat(form.get('montantHT')) || 0,
+                montantTTC: parseFloat(form.get('montantTTC')) || 0,
+                statut: form.get('statut'),
+                notes: form.get('notes'),
+                createur: userName,
+                dateCreation: new Date().toLocaleDateString('fr-FR')
+            };
+
+            // Add to local data
+            if (currentFormType === 'bilan') {
+                newRecord.id = `B${Date.now()}`;
+                data.bilans.push(newRecord);
+                renderTable('bilans', data.bilans);
+            } else if (currentFormType === 'formation') {
+                newRecord.id = `F${Date.now()}`;
+                data.formations.push(newRecord);
+                renderTable('formations', data.formations);
+            } else if (currentFormType === 'seminaire') {
+                newRecord.id = `S${Date.now()}`;
+                data.seminaires.push(newRecord);
+                renderTable('seminaires', data.seminaires);
+            } else if (currentFormType === 'animation') {
+                newRecord.id = `A${Date.now()}`;
+                data.animations.push(newRecord);
+                renderTable('animations', data.animations);
+            }
+
+            // Sync to Sheets (simplifiée - en prod: append row API)
+            saveToLocalStorage();
+            closeModal('formModal');
+            alert('✓ ' + newRecord.clientName + ' ajouté(e)');
+        }
+
+        // ============ RENDERING ============
+        function renderDashboard() {
+            const totalCA = data.bilans.reduce((sum, b) => sum + b.montantTTC, 0) +
+                           data.formations.reduce((sum, f) => sum + f.montantTTC, 0);
+            const inProgress = data.bilans.filter(b => b.statut === 'En cours').length +
+                              data.formations.filter(f => f.statut === 'En cours').length;
+
+            const html = `
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>CA Total</h3>
+                        <div class="value">${totalCA.toLocaleString('fr-FR')} €</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>En cours</h3>
+                        <div class="value">${inProgress}</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Bilans</h3>
+                        <div class="value">${data.bilans.length}</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Formations</h3>
+                        <div class="value">${data.formations.length}</div>
+                    </div>
+                </div>
+                <div class="sync-info">
+                    📊 Dernière synchro : ${lastSyncTime ? lastSyncTime.toLocaleTimeString('fr-FR') : 'Jamais'}
+                </div>
+            `;
+
+            document.getElementById('dashboardContent').innerHTML = html;
+        }
+
+        function renderTable(type, records) {
+            const container = document.getElementById(type + 'Table');
+            if (!records.length) {
+                container.innerHTML = '<div class="empty-state"><h3>Aucune donnée</h3></div>';
+                return;
+            }
+
+            const headers = type === 'bilans' ? 
+                ['Client', 'Email', 'Type', 'Montant TTC', 'Statut', 'Créateur'] :
+                type === 'formations' ?
+                ['Client', 'Email', 'Type', 'Montant TTC', 'Statut', 'Créateur'] :
+                ['Titre/Client', 'Montant TTC', 'Statut', 'Créateur'];
+
+            let html = '<table><tr><th>' + headers.join('</th><th>') + '</th></tr>';
+            records.forEach(r => {
+                html += '<tr><td>' + r.clientName + '</td><td>' + (r.clientEmail || r.titre || '') + '</td>';
+                if (type !== 'seminaires') {
+                    html += '<td>' + (r.prestationType || r.typeAnimation || '') + '</td>';
+                }
+                html += '<td>' + r.montantTTC + ' €</td>';
+                html += '<td><span class="status-tag ' + r.statut.toLowerCase().replace(' ', '') + '">' + r.statut + '</span></td>';
+                html += '<td>' + r.createur + '</td></tr>';
+            });
+            html += '</table>';
+
+            container.innerHTML = html;
+        }
+
+        // ============ FILTERS ============
+        function filterData(type) {
+            // TODO: Implement filtering
+            renderTable(type, data[type]);
+        }
+
+        function filterDocuments() {
+            // TODO: Implement document filtering
+        }
+
+        // ============ EXPORT ============
+        function showExport() {
+            const jsonData = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `EL_ENERGIE_CRM_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            alert('✓ Export JSON téléchargé');
+        }
+
+        // ============ STORAGE ============
+        function saveToLocalStorage() {
+            localStorage.setItem('el-energie-crm-v7', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('el-energie-crm-v7');
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        // ============ SYNC MODAL ============
+        function showSyncStatus() {
+            const details = `
+                <strong>Status Connexion :</strong> ${sheetsId && apiKey ? '✓ Connecté' : '✗ Non connecté'}<br>
+                <strong>Utilisateur :</strong> ${userName}<br>
+                <strong>Dernière synchro :</strong> ${lastSyncTime ? lastSyncTime.toLocaleString('fr-FR') : 'Jamais'}<br>
+                <strong>Bilans en cache :</strong> ${data.bilans.length}<br>
+                <strong>Formations en cache :</strong> ${data.formations.length}<br>
+                <strong>Séminaires en cache :</strong> ${data.seminaires.length}<br>
+                <strong>Animations en cache :</strong> ${data.animations.length}<br>
+                <br><strong>Mode :</strong> ${sheetsId ? 'Connecté Sheets (VERT)' : 'Local (JAUNE)'}<br>
+            `;
+            document.getElementById('syncDetails').innerHTML = details;
+            document.getElementById('syncModal').classList.add('active');
+        }
+
+        // Load on init
+        loadFromLocalStorage();
+    </script>
+</body>
+</html>
