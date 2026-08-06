@@ -3,514 +3,1196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM EL-ÉNERGIE</title>
+    <title>CRM Edwige et Florence EL-ÉNERGIE</title>
     <style>
+        input[type="email"]::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+        input[type="email"] {
+            background-image: none;
+        }
+        /* Enlever spinners des champs number */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f5f5f5; color: #333; }
+        body { font-family: Helvetica, Arial; background: #f5f5f5; }
+        
+        :root {
+            --color-primary: #0F4761;
+            --color-accent: #F37322;
+        }
+        
+        body.florence-mode {
+            --color-primary: #8b5a8e;
+            --color-accent: #d4a5d4;
+        }
+        
         .container { display: flex; height: 100vh; }
-        .sidebar { width: 220px; background: #0F4761; color: white; padding: 20px; overflow-y: auto; }
-        .sidebar h1 { font-size: 16px; margin-bottom: 30px; color: #F37322; }
-        .nav-item { display: block; width: 100%; padding: 10px; margin-bottom: 6px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; text-align: left; }
-        .nav-item:hover, .nav-item.active { background: #F37322; }
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
-        .section { display: none; }
-        .section.active { display: block; }
-        h2 { color: #0F4761; margin-bottom: 20px; font-size: 24px; }
-        .btn { padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; }
-        .btn-primary { background: #F37322; color: white; }
-        .btn-primary:hover { background: #e06a1b; }
-        .btn-secondary { background: #e0e0e0; color: #333; }
-        .btn-sm { padding: 4px 8px; font-size: 11px; }
-        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
-        thead { background: #0F4761; color: white; }
-        th { padding: 12px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 12px; }
-        .badge { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
-        .badge-draft { background: #e0e0e0; color: #333; }
-        .badge-ready { background: #4CAF50; color: white; }
-        .badge-sent { background: #2196F3; color: white; }
-        .badge-signed { background: #9C27B0; color: white; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .sidebar { width: 250px; background: var(--color-primary); color: white; padding: 20px; overflow-y: auto; }
+        .sidebar h1 { font-size: 16px; margin-bottom: 30px; }
+        .sidebar h2 { margin: 20px 0 10px; font-size: 12px; text-transform: uppercase; color: #aaa; }
+        .sidebar button { width: 100%; padding: 10px; margin: 5px 0; background: white; color: var(--color-primary); border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .sidebar button.active { background: var(--color-accent); }
+        .main { flex: 1; display: flex; flex-direction: column; }
+        .header { background: var(--color-primary); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .header-actions button { background: var(--color-accent); color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; font-weight: 600; font-size: 12px; }
+        .header-actions select { background: var(--color-accent); color: white; padding: 8px 12px; border-radius: 4px; border: none; font-weight: 600; cursor: pointer; }
+        .content { flex: 1; overflow: auto; padding: 20px; }
+        .view { display: none; }
+        .view.active { display: block; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 15px; font-size: 12px; }
+        th { background: var(--color-primary); color: white; padding: 12px; text-align: left; font-size: 12px; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #ddd; font-size: 12px; }
+        tr:hover { background: #f9f9f9; }
+        .btn-edit { background: var(--color-accent); color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .btn-delete { background: #d32f2f; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-left: 5px; }
+        .btn-doc { background: #ccc; color: white; padding: 4px 8px; border: none; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: 600; min-width: 60px; }
+        .btn-doc.genere { background: #4caf50; }
+        .btn-doc.envoye { background: #2196f3; }
+        .btn-doc.signe { background: #ff9800; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 8px; padding: 30px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; color: #0F4761; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #F37322; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-buttons button { flex: 1; }
-        .actions { display: flex; gap: 6px; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h2 { color: var(--color-primary); margin-bottom: 20px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--color-primary); font-size: 13px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: Helvetica, Arial; }
+        .modal-footer { margin-top: 20px; text-align: right; }
+        .modal-footer button { padding: 10px 20px; margin-left: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .button-cancel { background: #ccc; color: #333; }
+        .button-save { background: var(--color-accent); color: white; }
+        h2 { color: var(--color-primary); margin-bottom: 15px; font-size: 18px; }
+        .statut-badge { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+        .statut-prospect { background: #e8f4f8; color: var(--color-primary); }
+        .statut-encours { background: #fff3e0; color: var(--color-accent); }
+        .statut-facture { background: #e8f5e9; color: #2e7d32; }
+        .statut-paye { background: #f3e5f5; color: #6a1b9a; }
+        .statut-termine { background: #e0f2f1; color: #00695c; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <h1>EL-ÉNERGIE</h1>
-            <button class="nav-item active" onclick="switchTab('formations')">Formations</button>
-            <button class="nav-item" onclick="switchTab('entreprises')">Entreprises</button>
-            <button class="nav-item" onclick="switchTab('bilans')">Bilans</button>
-            <button class="nav-item" onclick="switchTab('contacts')">Contacts</button>
-            <button class="nav-item" onclick="switchTab('dashboard')">Dashboard</button>
-        </div>
-        
-        <div class="main-content">
-            <!-- FORMATIONS -->
-            <section class="section active" id="section-formations">
-                <h2>Formations</h2>
-                <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openModalFormation()">+ Ajouter formation</button>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Entreprise</th>
-                                <th>Nom</th>
-                                <th>Intitulé</th>
-                                <th>TTC</th>
-                                <th>Statut</th>
-                                <th>Participants</th>
-                                <th>Diagnostic</th>
-                                <th>Fiche Navette</th>
-                                <th>Programme</th>
-                                <th>Convention</th>
-                                <th>Feuille Émarg</th>
-                                <th>Attestation</th>
-                                <th>Facture</th>
-                                <th>Facture Acq</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-formations"></tbody>
-                    </table>
-                </div>
-            </section>
-            
-            <!-- ENTREPRISES -->
-            <section class="section" id="section-entreprises">
-                <h2>Entreprises</h2>
-                <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openModalEntreprise()">+ Ajouter entreprise</button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Entreprise</th>
-                            <th>Contact 1</th>
-                            <th>Email 1</th>
-                            <th>Tel 1</th>
-                            <th>Contact 2</th>
-                            <th>Email 2</th>
-                            <th>Tel 2</th>
-                            <th>Statut</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-entreprises"></tbody>
-                </table>
-            </section>
-            
-            <!-- BILANS -->
-            <section class="section" id="section-bilans">
-                <h2>Bilans de Compétences</h2>
-                <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openModalBilan()">+ Ajouter bilan</button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Client</th>
-                            <th>Type</th>
-                            <th>Montant</th>
-                            <th>Statut</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-bilans"></tbody>
-                </table>
-            </section>
-            
-            <!-- CONTACTS -->
-            <section class="section" id="section-contacts">
-                <h2>Contacts</h2>
-                <div style="margin-top: 30px;">
-                    <div style="background: white; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
-                        <h3 style="color: #0F4761; margin-bottom: 15px;">Edwige Lena</h3>
-                        <div style="margin-bottom: 10px;"><strong>Tel:</strong> 0681032047</div>
-                        <div style="margin-bottom: 10px;"><strong>Email:</strong> el.energie@orange.fr</div>
-                        <div><strong>Adresse:</strong> 83 Boulevard des Vagues, 13008 Marseille</div>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 4px;">
-                        <h3 style="color: #0F4761; margin-bottom: 15px;">Florence Benoliel</h3>
-                        <div style="margin-bottom: 10px;"><strong>Tel:</strong> 0663735521</div>
-                        <div><strong>Email:</strong> fgabalda@gmail.com</div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- DASHBOARD -->
-            <section class="section" id="section-dashboard">
-                <h2>Dashboard</h2>
-                <div id="dashboard-content"></div>
-            </section>
-        </div>
-    </div>
-    
-    <!-- MODAL FORMATION -->
-    <div class="modal" id="modal-formation">
-        <div class="modal-content">
-            <h3 style="color: #0F4761; margin-bottom: 20px;">Formation</h3>
-            <div class="form-row">
-                <div class="form-group"><label>Entreprise</label><select id="form-formation-entreprise"></select></div>
-                <div class="form-group"><label>Nom du Client</label><input type="text" id="form-formation-nom"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Type</label><select id="form-formation-type"><option>GDI</option><option>QVCT</option><option>DISC</option><option>Coaching</option></select></div>
-                <div class="form-group"><label>Intitulé</label><input type="text" id="form-formation-intitule"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc" onchange="calculateHT()"></div>
-                <div class="form-group"><label>Montant HT</label><input type="number" id="form-formation-montant-ht" readonly></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Date Début</label><input type="date" id="form-formation-date-debut"></div>
-                <div class="form-group"><label>Responsable</label><select id="form-formation-responsable"><option>Edwige</option><option>Florence</option></select></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Nombre de Participants</label><input type="number" id="form-formation-nb-participants" min="0"></div>
-                <div class="form-group"><label>Statut</label><select id="form-formation-statut"><option>À générer</option><option>Généré</option><option>Envoyé</option><option>Signé</option></select></div>
-            </div>
-            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" style="height: 180px; resize: vertical;"></textarea></div>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="saveFormation()">Enregistrer</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-formation')">Annuler</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL ENTREPRISE -->
-    <div class="modal" id="modal-entreprise">
-        <div class="modal-content">
-            <h3 style="color: #0F4761; margin-bottom: 20px;">Entreprise</h3>
-            <div class="form-group"><label>Nom</label><input type="text" id="form-entreprise-nom"></div>
-            <div class="form-row">
-                <div class="form-group"><label>Contact 1</label><input type="text" id="form-entreprise-contact1"></div>
-                <div class="form-group"><label>Email 1</label><input type="email" id="form-entreprise-email1"></div>
-            </div>
-            <div class="form-group"><label>Téléphone 1</label><input type="tel" id="form-entreprise-tel1"></div>
-            <div class="form-row">
-                <div class="form-group"><label>Contact 2</label><input type="text" id="form-entreprise-contact2"></div>
-                <div class="form-group"><label>Email 2</label><input type="email" id="form-entreprise-email2"></div>
-            </div>
-            <div class="form-group"><label>Téléphone 2</label><input type="tel" id="form-entreprise-tel2"></div>
-            <div class="form-group"><label>Statut</label><select id="form-entreprise-statut"><option>Prospection</option><option>Contact pris</option><option>Client</option></select></div>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="saveEntreprise()">Enregistrer</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-entreprise')">Annuler</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL BILAN -->
-    <div class="modal" id="modal-bilan">
-        <div class="modal-content">
-            <h3 style="color: #0F4761; margin-bottom: 20px;">Bilan</h3>
-            <div class="form-group"><label>Nom du Client</label><input type="text" id="form-bilan-nom"></div>
-            <div class="form-group"><label>Type</label><select id="form-bilan-type"><option>Essentiel</option><option>Premium</option></select></div>
-            <div class="form-row">
-                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-bilan-montant"></div>
-                <div class="form-group"><label>Date Début</label><input type="date" id="form-bilan-date-debut"></div>
-            </div>
-            <div class="form-group"><label>Statut</label><select id="form-bilan-statut"><option>Prise de contact</option><option>En cours</option><option>Terminé</option></select></div>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="saveBilan()">Enregistrer</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-bilan')">Annuler</button>
-            </div>
-        </div>
+
+<div class="container">
+    <div class="sidebar">
+        <h1>EL-ÉNERGIE</h1>
+        <h2>MES CLIENTS</h2>
+        <button class="nav-btn active" onclick="switchView('dashboard')">📊 Dashboard</button>
+        <button class="nav-btn" onclick="switchView('bilans')">📋 Bilans</button>
+        <button class="nav-btn" onclick="switchView('formations')">🎓 Formations</button>
+        <button class="nav-btn" onclick="switchView('animations')">🎤 Animations</button>
+        <button class="nav-btn" onclick="switchView('seminaires')">🎯 Séminaires</button>
     </div>
 
-    <script>
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwNnFpBYCHJL-B0ua-KrYz6vK16CcaA0TQjAYP6SA_0hC4Gas9r_H-BtnnWSZzKv6oTsQ/exec';
-        const DOC_LINKS = {
-            diagnostic: '1nce_ZaplWutY-RhllB_Eso96GOgN5D5hujVPpy3Emkk',
-            ficheNavette: '13plfhCGXsfzIwR1bwUzwhmsr6td9rsLz',
-            programme: '1biTmVtzEEjPG5T0e5s_7EjXc5VqC5ZEgR43dRmM0BIo',
-            convention: '1-gvct63yaMLfYcBIj4QZ4OUJ5lzW2S871vxpa8zpEGM'
-        };
-        let crmData = { entreprises: [], formations: [], bilans: [] };
-        
-        function calculateHT() {
-            const ttc = parseFloat(document.getElementById('form-formation-montant-ttc').value) || 0;
-            const ht = parseFloat((ttc * 0.8).toFixed(2));
-            document.getElementById('form-formation-montant-ht').value = ht;
-        }
-        
-        function initCRM() {
-            const stored = localStorage.getItem('el-energie-crm-v8');
-            if (stored) try { crmData = JSON.parse(stored); } catch(e) { console.error(e); }
-            renderAll();
-        }
-        
-        function saveCRM() { localStorage.setItem('el-energie-crm-v8', JSON.stringify(crmData)); }
-        
-        function switchTab(tab) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(s => s.classList.remove('active'));
-            document.getElementById('section-' + tab).classList.add('active');
-            event.target.classList.add('active');
-        }
-        
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openModalFormation() { document.getElementById('modal-formation').classList.add('active'); updateFormationSelect(); }
-        function openModalEntreprise() { document.getElementById('modal-entreprise').classList.add('active'); }
-        function openModalBilan() { document.getElementById('modal-bilan').classList.add('active'); }
-        
-        function saveFormation() {
-            const ttc = parseFloat(document.getElementById('form-formation-montant-ttc').value) || 0;
-            const text = document.getElementById('form-formation-participants').value.trim();
-            const participants = text ? text.split('\n').map(p => p.trim()).filter(p => p) : [];
-            
-            const f = {
-                id: Date.now(),
-                entreprise: document.getElementById('form-formation-entreprise').value,
-                nom: document.getElementById('form-formation-nom').value,
-                type: document.getElementById('form-formation-type').value,
-                intitule: document.getElementById('form-formation-intitule').value,
-                montantTTC: ttc,
-                montantHT: parseFloat((ttc * 0.8).toFixed(2)),
-                dateDebut: document.getElementById('form-formation-date-debut').value,
-                responsable: document.getElementById('form-formation-responsable').value,
-                statut: document.getElementById('form-formation-statut').value,
-                nbParticipants: parseInt(document.getElementById('form-formation-nb-participants').value) || 0,
-                participants: participants,
-                diagnostic: 'À générer',
-                ficheNavette: 'À générer',
-                programme: 'À générer',
-                convention: 'À générer',
-                feuilleEmargement: 'À générer',
-                attestation: 'À générer',
-                facture: 'À générer',
-                factureAcquitte: 'À générer'
-            };
-            crmData.formations.push(f);
-            saveCRM();
-            closeModal('modal-formation');
-            renderAll();
-        }
-        
-        function saveEntreprise() {
-            const e = {
-                id: Date.now(),
-                nom: document.getElementById('form-entreprise-nom').value,
-                contact1: document.getElementById('form-entreprise-contact1').value,
-                email1: document.getElementById('form-entreprise-email1').value,
-                tel1: document.getElementById('form-entreprise-tel1').value,
-                contact2: document.getElementById('form-entreprise-contact2').value,
-                email2: document.getElementById('form-entreprise-email2').value,
-                tel2: document.getElementById('form-entreprise-tel2').value,
-                statut: document.getElementById('form-entreprise-statut').value
-            };
-            crmData.entreprises.push(e);
-            saveCRM();
-            closeModal('modal-entreprise');
-            renderAll();
-        }
-        
-        function saveBilan() {
-            const b = {
-                id: Date.now(),
-                nom: document.getElementById('form-bilan-nom').value,
-                type: document.getElementById('form-bilan-type').value,
-                montant: parseFloat(document.getElementById('form-bilan-montant').value) || 0,
-                dateDebut: document.getElementById('form-bilan-date-debut').value,
-                statut: document.getElementById('form-bilan-statut').value
-            };
-            crmData.bilans.push(b);
-            saveCRM();
-            closeModal('modal-bilan');
-            renderAll();
-        }
-        
-        function renderFormations() {
-            const tbody = document.getElementById('table-formations');
-            tbody.innerHTML = crmData.formations.map(f => {
-                const ent = crmData.entreprises.find(e => e.id == f.entreprise);
-                const parts = Array.isArray(f.participants) ? f.participants.join(', ') : '-';
-                const getClass = (status) => {
-                    if (status === 'À générer') return 'badge badge-draft';
-                    if (status === 'Généré') return 'badge badge-ready';
-                    if (status === 'Envoyé') return 'badge badge-sent';
-                    if (status === 'Signé') return 'badge badge-signed';
-                    return 'badge badge-draft';
-                };
-                const link = (docType, id) => {
-                    if (!id) return `<span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span>`;
-                    return `<a href="https://docs.google.com/document/d/${id}/edit" target="_blank" style="text-decoration: none;"><span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span></a>`;
-                };
-                return `
-                    <tr>
-                        <td><strong>${ent ? ent.nom : 'N/A'}</strong></td>
-                        <td>${f.nom}</td>
-                        <td>${f.intitule}</td>
-                        <td>${f.montantTTC.toFixed(2)}€</td>
-                        <td><span class="badge">${f.statut}</span></td>
-                        <td><strong>${f.nbParticipants || 0}</strong> - ${parts.substring(0, 20)}${parts.length > 20 ? '...' : ''}</td>
-                        <td>${link('diagnostic', DOC_LINKS.diagnostic)}</td>
-                        <td>${link('ficheNavette', DOC_LINKS.ficheNavette)}</td>
-                        <td>${link('programme', DOC_LINKS.programme)}</td>
-                        <td>${link('convention', DOC_LINKS.convention)}</td>
-                        <td><span class="${getClass(f.feuilleEmargement || 'À générer')}">${f.feuilleEmargement || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.attestation || 'À générer')}">${f.attestation || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.facture || 'À générer')}">${f.facture || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.factureAcquitte || 'À générer')}">${f.factureAcquitte || 'À générer'}</span></td>
-                        <td><div class="actions"><button class="btn btn-sm btn-secondary" onclick="editFormation(${f.id})">Éditer</button><button class="btn btn-sm btn-primary" onclick="generateDocuments(${f.id})">Générer</button></div></td>
-                    </tr>
-                `;
-            }).join('');
-        }
-        
-        function renderEntreprises() {
-            const tbody = document.getElementById('table-entreprises');
-            tbody.innerHTML = crmData.entreprises.map(e => `
-                <tr>
-                    <td><strong>${e.nom}</strong></td>
-                    <td>${e.contact1}</td>
-                    <td>${e.email1}</td>
-                    <td>${e.tel1}</td>
-                    <td>${e.contact2}</td>
-                    <td>${e.email2}</td>
-                    <td>${e.tel2}</td>
-                    <td><span class="badge">${e.statut || '-'}</span></td>
-                    <td><button class="btn btn-sm btn-secondary" onclick="editEntreprise(${e.id})">Modifier</button></td>
-                </tr>
-            `).join('');
-        }
-        
-        function renderBilans() {
-            const tbody = document.getElementById('table-bilans');
-            tbody.innerHTML = crmData.bilans.map(b => `
-                <tr>
-                    <td><strong>${b.nom}</strong></td>
-                    <td>${b.type}</td>
-                    <td>${b.montant.toFixed(2)}€</td>
-                    <td><span class="badge">${b.statut}</span></td>
-                    <td>${b.dateDebut || '-'}</td>
-                    <td><button class="btn btn-sm btn-secondary" onclick="editBilan(${b.id})">Modifier</button></td>
-                </tr>
-            `).join('');
-        }
-        
-        function renderDashboard() {
-            const div = document.getElementById('dashboard-content');
-            const totalF = crmData.formations.length;
-            const totalB = crmData.bilans.length;
-            const totalPers = crmData.formations.reduce((s, f) => s + (f.nbParticipants || 0), 0);
-            const totalCA = crmData.formations.reduce((s, f) => s + f.montantTTC, 0) + crmData.bilans.reduce((s, b) => s + b.montant, 0);
-            
-            div.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                    <div style="background: white; padding: 20px; border-radius: 4px;">
-                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Formations</div>
-                        <div style="font-size: 32px; font-weight: bold; color: #0F4761;">${totalF}</div>
+    <div class="main">
+        <div class="header">
+            <h1>EL-ÉNERGIE CRM</h1>
+            <div class="header-actions">
+                <select id="userSelector" onchange="switchUser()">
+                    <option value="Edwige">👤 Edwige</option>
+                    <option value="Florence">👤 Florence</option>
+                </select>
+                <button onclick="showAddClientModal()">+ Ajouter Client</button>
+                <button onclick="exportData()">📥 Export JSON</button>
+                <button onclick="triggerImport()">📤 Import JSON</button>
+            </div>
+            <input type="file" id="importFile" style="display: none;" onchange="importData(event)">
+        </div>
+        <div class="content">
+            <div id="dashboard" class="view active">
+                <h2>Tableau Bord</h2>
+                <div id="dashboardContent"></div>
+            </div>
+
+            <div id="bilans" class="view">
+                <h2>Bilans de Compétences</h2>
+                <div id="bilansTable"></div>
+            </div>
+
+            <div id="formations" class="view">
+                <h2>Formations</h2>
+                <div id="formationsTable"></div>
+            </div>
+
+            <!-- MODALE FICHE CLIENT -->
+            <div id="ficheClientModal" class="modal">
+                <div class="modal-content">
+                    <!-- Faux input pour capturer password manager -->
+                    <input type="password" style="display: none;">
+                    
+                    <h2>Fiche Client</h2>
+                    
+                    <div class="form-group">
+                        <label>Nom Client</label>
+                        <input type="text" id="fcClientName" autocomplete="new-password">
                     </div>
-                    <div style="background: white; padding: 20px; border-radius: 4px;">
-                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Participants</div>
-                        <div style="font-size: 32px; font-weight: bold; color: #F37322;">${totalPers}</div>
+                    
+                    <div class="form-group">
+                        <label>Entreprise</label>
+                        <input type="text" id="fcEntreprise" autocomplete="new-password">
                     </div>
-                    <div style="background: white; padding: 20px; border-radius: 4px;">
-                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Bilans</div>
-                        <div style="font-size: 32px; font-weight: bold; color: #4CAF50;">${totalB}</div>
+                    
+                    <div class="form-group">
+                        <label>SIRET</label>
+                        <input type="text" id="fcSIRET" autocomplete="new-password">
                     </div>
-                    <div style="background: white; padding: 20px; border-radius: 4px;">
-                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">CA TTC</div>
-                        <div style="font-size: 28px; font-weight: bold; color: #2196F3;">${totalCA.toFixed(0)}€</div>
+                    
+                    <div class="form-group">
+                        <label>Numéro TVA</label>
+                        <input type="text" id="fcNumeroTVA" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Adresse Postale</label>
+                        <input type="text" id="fcAdressePostale" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Type Prestation</label>
+                        <input type="text" id="fcPrestationType" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>OPCO</label>
+                        <input type="text" id="fcOPCO" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Montant HT (€)</label>
+                        <input type="number" id="fcMontantHT" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Montant TTC (€)</label>
+                        <input type="number" id="fcMontantTTC" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Date Début</label>
+                        <input type="text" id="fcDateDebut" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Date Fin</label>
+                        <input type="text" id="fcDateFin" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Statut</label>
+                        <input type="text" id="fcStatut" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Quantité Participants</label>
+                        <input type="number" id="fcQuantiteParticipants" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <input type="text" id="fcNotes" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contact Principal</label>
+                        <input type="text" id="fcContact1" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Principal</label>
+                        <input type="text" id="fcEmail1" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Téléphone Principal</label>
+                        <input type="text" id="fcTelephone1" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contact Secondaire</label>
+                        <input type="text" id="fcContact2" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Secondaire</label>
+                        <input type="text" id="fcEmail2" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Téléphone Secondaire</label>
+                        <input type="text" id="fcTelephone2" autocomplete="new-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="color: var(--color-accent); font-weight: bold;">Formateur</label>
+                        <input type="text" id="fcFormateur" readonly style="background: #f5f5f5;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="color: var(--color-accent); font-weight: bold;">Email Formateur</label>
+                        <input type="text" id="fcEmailFormateur" readonly style="background: #f5f5f5;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="color: var(--color-accent); font-weight: bold;">Téléphone Formateur</label>
+                        <input type="text" id="fcTelephoneFormateur" readonly style="background: #f5f5f5;">
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button class="button-cancel" onclick="closeFicheClientModal()">Fermer</button>
+                        <button class="button-save" onclick="generateFicheClient()">✓ Générer Fiche Client</button>
                     </div>
                 </div>
-            `;
+            </div>
+
+            <div id="animations" class="view">
+                <h2>Animations</h2>
+                <div id="animationsTable"></div>
+            </div>
+
+            <div id="seminaires" class="view">
+                <h2>Séminaires</h2>
+                <div id="seminairesTable"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL AJOUTER/MODIFIER -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Ajouter Client</h2>
+        
+        <div class="form-group">
+            <label>Nom Client</label>
+            <input type="text" id="editClientName">
+        </div>
+        
+        <div class="form-group">
+            <label>SIRET</label>
+            <input type="text" id="editSIRET">
+        </div>
+        
+        <div class="form-group">
+            <label>Numéro de TVA Intracommunautaire</label>
+            <input type="text" id="editNumeroTVA" placeholder="FR12345678901">
+        </div>
+        
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="editEmail">
+        </div>
+        
+        <div class="form-group">
+            <label>Téléphone</label>
+            <input type="text" id="editTelephone">
+        </div>
+
+        <div class="form-group">
+            <label>Entreprise</label>
+            <input type="text" id="editEntreprise">
+        </div>
+        
+        <div class="form-group" id="adresseGroup" style="display: none;">
+            <label>Adresse Postale</label>
+            <input type="text" id="editAdressePostale">
+        </div>
+        
+        <div class="form-group">
+            <label>Type Prestation</label>
+            <input type="text" id="editPrestationType">
+        </div>
+        
+        <div class="form-group" id="opcoGroup" style="display: none;">
+            <label>OPCO</label>
+            <input type="text" id="editOPCO">
+        </div>
+        
+        <div class="form-group">
+            <label>Montant TTC (€)</label>
+            <input type="number" id="editMontantTTC">
+        </div>
+        
+        <div class="form-group">
+            <label>Montant HT (€)</label>
+            <input type="number" id="editMontantHT" step="0.01">
+        </div>
+        
+        <div class="form-group">
+            <label>Quantité de participants</label>
+            <input type="number" id="editQuantiteParticipants">
+        </div>
+        
+        <div class="form-group">
+            <label>Date Début (JJ/MM/YYYY)</label>
+            <input type="text" id="editDateDebut" placeholder="01/01/2026">
+        </div>
+        
+        <div class="form-group">
+            <label>Date Fin (JJ/MM/YYYY)</label>
+            <input type="text" id="editDateFin" placeholder="05/01/2026">
+        </div>
+        
+        <div class="form-group">
+            <label>Statut</label>
+            <select id="editStatut">
+                <option value="Prospect">Prospect</option>
+                <option value="En cours">En cours</option>
+                <option value="Facturé">Facturé</option>
+                <option value="Payé">Payé</option>
+                <option value="Terminé">Terminé</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Contact 2 (Nom)</label>
+            <input type="text" id="editContact2">
+        </div>
+
+        <div class="form-group">
+            <label>Email 2</label>
+            <input type="email" id="editEmail2">
+        </div>
+
+        <div class="form-group">
+            <label>Téléphone 2</label>
+            <input type="text" id="editTelephone2">
+        </div>
+        
+        <div class="form-group">
+            <label>Notes</label>
+            <textarea id="editNotes" rows="3"></textarea>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="button-cancel" onclick="closeModal()">Annuler</button>
+            <button class="button-save" onclick="saveRecord()">Enregistrer</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PARTICIPANTS TABLE - 12 LIGNES -->
+<div id="listeStagiairesTableModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+    <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; margin: 20px auto;">
+        <h2>Participants (Maximum 12)</h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr style="background: #0F4761; color: white;">
+                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Nom Complet</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Email</th>
+                </tr>
+            </thead>
+            <tbody id="listeStagiairesTableBody">
+            </tbody>
+        </table>
+        
+        <div style="display: flex; gap: 10px;">
+            <button onclick="saveAllParticipants()" style="flex: 1; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">✓ Enregistrer</button>
+            <button onclick="closeListeStagiairesTableModal()" style="flex: 1; padding: 10px; background: #ccc; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentUser = 'Edwige';
+let editingRecord = null;
+let editingType = null;
+
+const getStatutClass = (statut) => {
+    const s = statut.toLowerCase();
+    if (s.includes('prospect')) return 'statut-prospect';
+    if (s.includes('cours')) return 'statut-encours';
+    if (s.includes('factur')) return 'statut-facture';
+    if (s.includes('pay')) return 'statut-paye';
+    if (s.includes('termin')) return 'statut-termine';
+    return 'statut-prospect';
+};
+
+const getDocuments = (type) => {
+    return type === 'formations' ? 
+        ['Diagnostic', 'Participants', 'Fiche Navette', 'Programme', 'Convention', 'Convocation', 'Feuille d\'émargement', 'Attestation', 'Facture', 'Facture acquitté'] :
+        ['Convention', 'Offre', 'FORM 03-F', 'Synthèse', 'Émargement'];
+};
+
+const getDocStatusColor = (status) => {
+    if (!status || status === 'À générer') return '#ccc';
+    if (status === 'Généré') return '#4caf50';
+    if (status === 'Envoyé') return '#2196f3';
+    if (status === 'Signé') return '#ff9800';
+    return '#ccc';
+};
+
+let data = {
+    bilans: [
+        {id:1, clientName:'Clémence Bach', email:'', telephone:'', contact2:'', email2:'', telephone2:'', entreprise:'', prestationType:'Premium', montantTTC:1920, statut:'En cours', notes:'', type:'bilan', documents:{}, utilisateur:'Edwige'},
+        {id:2, clientName:'Schéhérazade Bencherif', email:'schehrazadebencherif@gmail.com', telephone:'06 34 25 22 32', contact2:'', email2:'', telephone2:'', entreprise:'', prestationType:'Premium', montantTTC:1850, statut:'Facturé', notes:'', type:'bilan', documents:{}, utilisateur:'Edwige'},
+        {id:3, clientName:'Thomas Surier', email:'Thomas.surier@gmail.com', telephone:'+33 6 85 85 47 55', contact2:'', email2:'', telephone2:'', entreprise:'Salarié', prestationType:'Premium', montantTTC:1850, statut:'En cours', notes:'6 RDV de 2h', type:'bilan', documents:{}, utilisateur:'Edwige'},
+        {id:5, clientName:'Julie Cousseau', email:'julie.cousseau@laposte.net', telephone:'06 37 80 30 20', contact2:'', email2:'', telephone2:'', entreprise:'', prestationType:'Bilan', montantTTC:1850, statut:'Prospect', notes:'', type:'bilans', documents:{}, utilisateur:'Edwige'}
+    ],
+    formations: [
+        {id:1, clientName:'PML - GDI', email:'', telephone:'', contact2:'Laura Mercurio', email2:'', telephone2:'', entreprise:'Provence-Métropole Logement', prestationType:'GDI', montantTTC:3000, statut:'Prospect', notes:'Contact: Laura Mercurio', type:'formation', documents:{}, utilisateur:'Edwige'},
+        {id:2, clientName:'PML - QVCT', email:'', telephone:'', contact2:'', email2:'', telephone2:'', entreprise:'Provence-Métropole Logement', prestationType:'QVCT', montantTTC:5400, statut:'Facturé', notes:'280 collaborateurs', type:'formation', documents:{}, utilisateur:'Edwige'},
+        {id:3, clientName:'Légimétrie', email:'', telephone:'', contact2:'', email2:'', telephone2:'', entreprise:'Dwell', prestationType:'Formation Vente', montantTTC:2900, statut:'Facturé', notes:'4 jours', type:'formation', documents:{}, utilisateur:'Edwige'},
+        {id:4, clientName:'dinde', email:'mail', telephone:'0681032047', contact2:'', email2:'', telephone2:'', entreprise:'dupon', prestationType:'formation', montantTTC:6000, statut:'Prospect', notes:'', type:'formations', documents:{}, utilisateur:'Florence'}
+    ],
+    animations: [
+        {id:1, clientName:'FNAIM', email:'', telephone:'', contact2:'', email2:'', telephone2:'', entreprise:'FNAIM', prestationType:'Animation', montantTTC:300, statut:'Facturé', notes:'', type:'animation', documents:{}, utilisateur:'Edwige'}
+    ],
+    seminaires: [],
+    listeStagiaires: []
+};
+
+function switchView(view) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(view).classList.add('active');
+    event.target.classList.add('active');
+    renderTable(view);
+}
+
+function switchUser() {
+    currentUser = document.getElementById('userSelector').value;
+    applyUserColors();
+    renderTable('bilans');
+    renderTable('formations');
+    renderTable('animations');
+    renderTable('seminaires');
+    renderDashboard();
+}
+
+function applyUserColors() {
+    if (currentUser === 'Florence') {
+        document.body.classList.add('florence-mode');
+    } else {
+        document.body.classList.remove('florence-mode');
+    }
+}
+
+function saveData() {
+    localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
+}
+
+function loadData() {
+    const saved = localStorage.getItem('el-energie-crm-data-v2');
+    if (saved) data = JSON.parse(saved);
+}
+
+function renderDashboard() {
+    let bilans = data.bilans.filter(b => b.utilisateur === currentUser);
+    let formations = data.formations.filter(f => f.utilisateur === currentUser);
+    let animations = data.animations.filter(a => a.utilisateur === currentUser);
+    let seminaires = data.seminaires.filter(s => s.utilisateur === currentUser);
+    
+    let totalBilans = bilans.reduce((sum, b) => sum + b.montantTTC, 0);
+    let totalFormations = formations.reduce((sum, f) => sum + f.montantTTC, 0);
+    let totalAnimations = animations.reduce((sum, a) => sum + a.montantTTC, 0);
+    let totalSeminaires = seminaires.reduce((sum, s) => sum + s.montantTTC, 0);
+    
+    document.getElementById('dashboardContent').innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div style="background: white; padding: 20px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 24px; font-weight: bold; color: var(--color-primary);">${bilans.length}</div>
+                <div style="color: #999;">Bilans</div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--color-accent); margin-top: 10px;">${totalBilans}€</div>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 24px; font-weight: bold; color: var(--color-primary);">${formations.length}</div>
+                <div style="color: #999;">Formations</div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--color-accent); margin-top: 10px;">${totalFormations}€</div>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 24px; font-weight: bold; color: var(--color-primary);">${animations.length}</div>
+                <div style="color: #999;">Animations</div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--color-accent); margin-top: 10px;">${totalAnimations}€</div>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 24px; font-weight: bold; color: var(--color-primary);">${totalBilans + totalFormations + totalAnimations + totalSeminaires}</div>
+                <div style="color: #999;">Total CA</div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--color-accent); margin-top: 10px;">€</div>
+            </div>
+        </div>
+    `;
+}
+
+const docTemplateMap = {
+    'Fiche Client': '1w9wmsUehzJu7urssfQvuj9FHiuQ12nQfdG--NQnb0XY',
+    'Diagnostic': '1nce_ZaplWutY-RhllB_Eso96GOgN5D5hujVPpy3Emkk',
+    'Participants': '',
+    'Fiche Navette': '195s8Sg-7T8UrmCqyIhGMiM2lB-hzI4asf9sqy8b4Yqs',
+    'Programme': '1biTmVtzEEjPG5T0e5s_7EjXc5VqC5ZEgR43dRmM0BIo',
+    'Convention': '1-gvct63yaMLfYcBIj4QZ4OUJ5lzW2S871vxpa8zpEGM',
+    'Convocation': '',
+    'Feuille d\'émargement': '',
+    'Attestation': '',
+    'Facture': '',
+    'Facture acquitté': ''
+};
+
+function formatListeStagiaires(clientId) {
+    const participants = data.listeStagiaires ? data.listeStagiaires.filter(p => p.clientId === clientId) : [];
+    if (participants.length === 0) return '';
+    return participants.map(p => p.name + ' (' + p.email + ')').join('\n');
+}
+
+function getParticipantsOnly(clientId) {
+    // Retourne UNIQUEMENT les participants, vide si aucun
+    return formatListeStagiaires(clientId);
+}
+
+function generateDoc(type, clientId, docName) {
+    const record = data[type].find(r => r.id === clientId);
+    if (!record) return;
+
+    const templateId = docTemplateMap[docName];
+    if (!templateId) {
+        alert(`⚠️ Template non configuré pour ${docName}`);
+        return;
+    }
+
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbxq2RfH_rX7MoAoxfI0U9tEw4klIAUaXJ-NV_xJGmNlG0hKZnxTbtaQ74S_cvgSV275/exec";
+
+    const clientData = {
+        clientName: record.clientName,
+        formatateur: currentUser,
+        email: record.email,
+        telephone: record.telephone,
+        SIRET: record.SIRET || '',
+        numeroTVA: record.numeroTVA || '',
+        entreprise: record.entreprise,
+        adressePostale: record.adressePostale || '',
+        prestationType: record.prestationType,
+        OPCO: record.OPCO || '',
+        montantTTC: record.montantTTC,
+        montantHT: record.montantHT || 0,
+        dateDebut: record.dateDebut || '',
+        dateFin: record.dateFin || '',
+        contact2: record.contact2 || '',
+        email2: record.email2 || '',
+        telephone2: record.telephone2 || '',
+        quantiteParticipants: record.quantiteParticipants || '',
+        listeStagiaires: getParticipantsOnly(clientId)
+    };
+
+    fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ clientData, docName, templateId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('✓ Doc générée:', data.fileUrl);
+            alert(`✓ ${docName} généré!`);
+        } else {
+            console.error('❌ Erreur:', data.error);
+            alert(`❌ Erreur: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        console.error('❌ ERREUR FETCH:', err);
+        alert('❌ Erreur de connexion');
+    });
+}
+
+function cycleDocStatus(type, clientId, docName) {
+    const record = data[type].find(r => r.id === clientId);
+    if (!record) return;
+
+    if (!record.documents) record.documents = {};
+    
+    const states = ['À générer', 'Généré', 'Envoyé', 'Signé'];
+    const current = record.documents[docName] || 'À générer';
+    const idx = states.indexOf(current);
+    
+    // Si déjà "Signé", ne pas continuer (arrêt du cyclage)
+    if (current === 'Signé') {
+        return;
+    }
+    
+    const nextState = states[(idx + 1) % states.length];
+    
+    // Si on passe à "Généré", appeler le script
+    if (nextState === 'Généré' && current === 'À générer') {
+        generateDoc(type, clientId, docName);
+    }
+    
+    record.documents[docName] = nextState;
+    saveData();
+    renderTable(type);
+}
+
+function renderTable(type) {
+    const records = data[type];
+    const container = document.getElementById(type + 'Table');
+    const docs = getDocuments(type);
+    
+    const userRecords = records.filter(r => !r.utilisateur || r.utilisateur === currentUser);
+    
+    if (!userRecords.length) {
+        container.innerHTML = '<p>Aucune donnée</p>';
+        return;
+    }
+    
+    let html = '<table style="overflow-x: auto;"><tr>';
+    
+    if (type === 'formations') {
+        html += '<th>Entreprise</th><th>Nom du Client</th><th>Type de prestation</th><th>Montant HT</th><th>Montant TTC</th><th>Responsable</th><th>Statut</th><th style="font-size: 11px;">Fiche Client</th>';
+        docs.forEach(doc => {
+            html += '<th style="font-size: 11px; max-width: 80px;">' + doc + '</th>';
+        });
+    } else {
+        html += '<th>Client</th><th>Entreprise</th><th>Type</th><th>Montant</th><th>Responsable</th><th>Statut</th>';
+        docs.forEach(doc => {
+            html += '<th style="font-size: 11px; max-width: 80px;">' + doc + '</th>';
+        });
+        html += '<th>Email</th>';
+    }
+    
+    html += '<th>Actions</th></tr>';
+    
+    userRecords.forEach(r => {
+        html += '<tr>';
+        
+        if (type === 'formations') {
+            html += '<td>' + (r.entreprise || '—') + '</td>';
+            html += '<td>' + r.clientName + '</td>';
+            html += '<td>' + (r.prestationType || '') + '</td>';
+            html += '<td style="text-align: right;">' + (r.montantTTC ? Math.round(r.montantTTC * 0.8) : 0) + '€</td>';
+            html += '<td style="text-align: right;">' + r.montantTTC + '€</td>';
+            html += '<td><span style="display: inline-block; background: ' + (r.utilisateur === 'Edwige' ? '#F37322' : '#8b5a8e') + '; color: white; padding: 4px 8px; border-radius: 2px; font-size: 11px; font-weight: 600;">' + (r.utilisateur || 'Edwige') + '</span></td>';
+            html += '<td><span class="statut-badge ' + getStatutClass(r.statut) + '">' + r.statut + '</span></td>';
+            
+            // Bouton Fiche Client
+            html += '<td style="text-align: center;"><button class="btn-doc" onclick="openFicheClientModal(\'formations\', ' + r.id + ')" style="background: #FF6B9D; color: white; border: none; padding: 6px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600; min-width: 70px;">Fiche</button></td>';
+            
+            // Colonnes documents (y compris Participants)
+            docs.forEach(doc => {
+                if (doc === 'Participants') {
+                    // Afficher le bouton Gérer participants
+                    const participants = data.listeStagiaires ? data.listeStagiaires.filter(p => p.clientId === r.id) : [];
+                    const participantCount = participants.length;
+                    html += '<td style="font-size: 11px;">';
+                    if (participantCount > 0) {
+                        html += '<span style="display: inline-block; background: #4CAF50; color: white; padding: 4px 8px; border-radius: 3px; font-weight: 600; margin-right: 8px;">' + participantCount + ' participant' + (participantCount > 1 ? 's' : '') + '</span>';
+                    } else {
+                        html += '<span style="display: inline-block; background: #ccc; color: #666; padding: 4px 8px; border-radius: 3px; font-weight: 600; margin-right: 8px;">0 participant</span>';
+                    }
+                    html += '<button class="btn-doc" onclick="showListeStagiairesTableModal(' + r.id + ')" style="background: #2196F3; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600;">Gérer</button>';
+                    html += '</td>';
+                } else {
+                    // Afficher le bouton document
+                    const status = (r.documents && r.documents[doc]) || 'À générer';
+                    const bgColor = getDocStatusColor(status);
+                    html += '<td style="text-align: center;">';
+                    html += '<button class="btn-doc" onclick="cycleDocStatus(\'' + type + '\', ' + r.id + ', \'' + doc + '\')" style="background: ' + bgColor + '; color: white; border: none; padding: 6px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600; min-width: 70px;">' + status + '</button>';
+                    html += '</td>';
+                }
+            });
+        } else {
+            html += '<td>' + r.clientName + '</td>';
+            html += '<td>' + (r.entreprise || '—') + '</td>';
+            html += '<td>' + (r.prestationType || '') + '</td>';
+            html += '<td>' + r.montantTTC + '€</td>';
+            html += '<td><span style="display: inline-block; background: ' + (r.utilisateur === 'Edwige' ? '#F37322' : '#8b5a8e') + '; color: white; padding: 4px 8px; border-radius: 2px; font-size: 11px; font-weight: 600;">' + (r.utilisateur || 'Edwige') + '</span></td>';
+            html += '<td><span class="statut-badge ' + getStatutClass(r.statut) + '">' + r.statut + '</span></td>';
+            
+            docs.forEach(doc => {
+                const status = (r.documents && r.documents[doc]) || 'À générer';
+                const bgColor = getDocStatusColor(status);
+                html += '<td style="text-align: center;">';
+                html += '<button class="btn-doc" onclick="cycleDocStatus(\'' + type + '\', ' + r.id + ', \'' + doc + '\')" style="background: ' + bgColor + '; color: white; border: none; padding: 6px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600; min-width: 70px;">' + status + '</button>';
+                html += '</td>';
+            });
+            
+            html += '<td style="font-size: 11px;">';
+            if (r.email) html += r.email + '<br>';
+            if (r.email2) html += r.email2;
+            html += '</td>';
         }
         
-        function renderAll() {
-            renderFormations();
-            renderEntreprises();
-            renderBilans();
+        html += '<td>';
+        html += '<button class="btn-edit" onclick="editRecord(\'' + type + '\', ' + r.id + ')">✎</button> ';
+        html += '<button class="btn-delete" onclick="deleteRecord(\'' + type + '\', ' + r.id + ')">✕</button>';
+        html += '</td></tr>';
+    });
+    
+    html += '</table>';
+    container.innerHTML = html;
+}
+
+function toggleExtraFields() {
+    // Tous les champs sont maintenant toujours visibles
+    // Pas besoin de basculer les groupes
+}
+
+function showAddClientModal() {
+    editingRecord = null;
+    editingType = null;
+    document.getElementById('modalTitle').innerText = 'Ajouter Client';
+    document.getElementById('editClientName').value = '';
+    document.getElementById('editSIRET').value = '';
+    document.getElementById('editNumeroTVA').value = '';
+    document.getElementById('editEmail').value = '';
+    document.getElementById('editTelephone').value = '';
+    document.getElementById('editContact2').value = '';
+    document.getElementById('editEmail2').value = '';
+    document.getElementById('editTelephone2').value = '';
+    document.getElementById('editEntreprise').value = '';
+    document.getElementById('editAdressePostale').value = '';
+    document.getElementById('editPrestationType').value = '';
+    document.getElementById('editOPCO').value = '';
+    document.getElementById('editMontantTTC').value = '';
+    document.getElementById('editMontantHT').value = '';
+    document.getElementById('editDateDebut').value = '';
+    document.getElementById('editDateFin').value = '';
+    document.getElementById('editStatut').value = 'Prospect';
+    document.getElementById('editNotes').value = '';
+    document.getElementById('editQuantiteParticipants').value = '';
+    toggleExtraFields();
+    document.getElementById('editModal').classList.add('active');
+}
+
+function editRecord(type, id) {
+    editingType = type;
+    editingRecord = data[type].find(r => r.id === id);
+    
+    if (!editingRecord) {
+        alert('Erreur : enregistrement non trouvé');
+        return;
+    }
+    
+    document.getElementById('modalTitle').innerText = 'Modifier Client';
+    document.getElementById('editClientName').value = editingRecord.clientName || '';
+    document.getElementById('editSIRET').value = editingRecord.SIRET || '';
+    document.getElementById('editNumeroTVA').value = editingRecord.numeroTVA || '';
+    document.getElementById('editEmail').value = editingRecord.email || '';
+    document.getElementById('editTelephone').value = editingRecord.telephone || '';
+    document.getElementById('editContact2').value = editingRecord.contact2 || '';
+    document.getElementById('editEmail2').value = editingRecord.email2 || '';
+    document.getElementById('editTelephone2').value = editingRecord.telephone2 || '';
+    document.getElementById('editEntreprise').value = editingRecord.entreprise || '';
+    document.getElementById('editAdressePostale').value = editingRecord.adressePostale || '';
+    document.getElementById('editPrestationType').value = editingRecord.prestationType || '';
+    document.getElementById('editOPCO').value = editingRecord.OPCO || '';
+    document.getElementById('editMontantTTC').value = editingRecord.montantTTC || 0;
+    document.getElementById('editMontantHT').value = editingRecord.montantHT || 0;
+    document.getElementById('editDateDebut').value = editingRecord.dateDebut || '';
+    document.getElementById('editDateFin').value = editingRecord.dateFin || '';
+    document.getElementById('editStatut').value = editingRecord.statut || 'Prospect';
+    document.getElementById('editNotes').value = editingRecord.notes || '';
+    document.getElementById('editQuantiteParticipants').value = editingRecord.quantiteParticipants || '';
+    
+    toggleExtraFields();
+    document.getElementById('editModal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('editModal').classList.remove('active');
+}
+
+let currentListeStagiairesClientId = null;
+
+function showListeStagiairesTableModal(clientId) {
+    currentListeStagiairesClientId = clientId;
+    
+    // Récupérer les participants existants pour ce client
+    const existingParticipants = data.listeStagiaires ? data.listeStagiaires.filter(p => p.clientId === clientId) : [];
+    
+    // Générer 12 lignes
+    let html = '';
+    for (let i = 0; i < 12; i++) {
+        const existing = existingParticipants[i] || { name: '', email: '' };
+        html += `<tr>
+            <td style="padding: 8px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_name_${i}" value="${existing.name}" autocomplete="new-password" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 3px;"></td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><input type="email" id="listeStagiaire_email_${i}" value="${existing.email}" autocomplete="new-password" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 3px;"></td>
+        </tr>`;
+    }
+    
+    document.getElementById('listeStagiairesTableBody').innerHTML = html;
+    document.getElementById('listeStagiairesTableModal').style.display = 'flex';
+}
+
+function closeListeStagiairesTableModal() {
+    document.getElementById('listeStagiairesTableModal').style.display = 'none';
+    currentListeStagiairesClientId = null;
+}
+
+function saveAllParticipants() {
+    if (!data.listeStagiaires) {
+        data.listeStagiaires = [];
+    }
+    
+    // Supprimer les anciens participants pour ce client
+    data.listeStagiaires = data.listeStagiaires.filter(p => p.clientId !== currentListeStagiairesClientId);
+    
+    // Ajouter les nouveaux participants
+    for (let i = 0; i < 12; i++) {
+        const name = document.getElementById(`listeStagiaire_name_${i}`).value.trim();
+        const email = document.getElementById(`listeStagiaire_email_${i}`).value.trim();
+        
+        if (name && email) {
+            data.listeStagiaires.push({
+                id: 'listeStagiaire_' + currentListeStagiairesClientId + '_' + i,
+                clientId: currentListeStagiairesClientId,
+                name: name,
+                email: email
+            });
+        }
+    }
+    
+    saveData();
+    renderTable('formations');
+    closeListeStagiairesTableModal();
+}
+
+function saveAndGenerateAllDocs() {
+    // Sauvegarder listeStagiaires d'abord
+    if (!data.listeStagiaires) {
+        data.listeStagiaires = [];
+    }
+    data.listeStagiaires = data.listeStagiaires.filter(p => p.clientId !== currentListeStagiairesClientId);
+    for (let i = 0; i < 12; i++) {
+        const name = document.getElementById(`listeStagiaire_name_${i}`).value.trim();
+        const email = document.getElementById(`listeStagiaire_email_${i}`).value.trim();
+        if (name && email) {
+            data.listeStagiaires.push({
+                id: 'listeStagiaire_' + currentListeStagiairesClientId + '_' + i,
+                clientId: currentListeStagiairesClientId,
+                name: name,
+                email: email
+            });
+        }
+    }
+    saveData();
+    
+    // Générer SEULEMENT les docs qui ont un templateId configuré
+    const docsAvecTemplate = Object.keys(docTemplateMap).filter(doc => docTemplateMap[doc] && doc !== 'Participants');
+    
+    docsAvecTemplate.forEach(docName => {
+        generateDoc('formations', currentListeStagiairesClientId, docName);
+    });
+    
+    // Mettre tous les statuts à "Généré"
+    const record = data.formations.find(r => r.id === currentListeStagiairesClientId);
+    if (record) {
+        if (!record.documents) record.documents = {};
+        docsAvecTemplate.forEach(docName => {
+            record.documents[docName] = 'Généré';
+        });
+    }
+    
+    saveData();
+    renderTable('formations');
+    closeListeStagiairesTableModal();
+}
+
+function saveRecord() {
+    const name = document.getElementById('editClientName').value.trim();
+    const SIRET = document.getElementById('editSIRET').value.trim();
+    const numeroTVA = document.getElementById('editNumeroTVA').value.trim();
+    const email = document.getElementById('editEmail').value.trim();
+    const telephone = document.getElementById('editTelephone').value.trim();
+    const contact2 = document.getElementById('editContact2').value.trim();
+    const email2 = document.getElementById('editEmail2').value.trim();
+    const telephone2 = document.getElementById('editTelephone2').value.trim();
+    const entreprise = document.getElementById('editEntreprise').value.trim();
+    const adressePostale = document.getElementById('editAdressePostale').value.trim();
+    const prestationType = document.getElementById('editPrestationType').value.trim();
+    const OPCO = document.getElementById('editOPCO').value.trim();
+    const montant = parseInt(document.getElementById('editMontantTTC').value) || 0;
+    const montantHT = parseFloat(document.getElementById('editMontantHT').value) || 0;
+    const dateDebut = document.getElementById('editDateDebut').value.trim();
+    const dateFin = document.getElementById('editDateFin').value.trim();
+    const statut = document.getElementById('editStatut').value;
+    const notes = document.getElementById('editNotes').value.trim();
+    const quantiteParticipants = document.getElementById('editQuantiteParticipants').value.trim();
+    
+    if (!name || !prestationType) {
+        alert('Nom et Type sont obligatoires');
+        return;
+    }
+    
+    if (editingRecord) {
+        editingRecord.clientName = name;
+        editingRecord.SIRET = SIRET;
+        editingRecord.numeroTVA = numeroTVA;
+        editingRecord.email = email;
+        editingRecord.telephone = telephone;
+        editingRecord.contact2 = contact2;
+        editingRecord.email2 = email2;
+        editingRecord.telephone2 = telephone2;
+        editingRecord.entreprise = entreprise;
+        editingRecord.adressePostale = adressePostale;
+        editingRecord.prestationType = prestationType;
+        editingRecord.OPCO = OPCO;
+        editingRecord.montantTTC = montant;
+        editingRecord.montantHT = montantHT;
+        editingRecord.dateDebut = dateDebut;
+        editingRecord.dateFin = dateFin;
+        editingRecord.statut = statut;
+        editingRecord.notes = notes;
+        editingRecord.quantiteParticipants = quantiteParticipants;
+        renderTable(editingType);
+    } else {
+        const guessType = prestationType.toLowerCase().includes('bilan') ? 'bilans' : 
+                         prestationType.toLowerCase().includes('animation') ? 'animations' : 'formations';
+        const newId = Math.max(...data[guessType].map(r => r.id), 0) + 1;
+        data[guessType].push({
+            id: newId,
+            clientName: name,
+            SIRET: SIRET,
+            numeroTVA: numeroTVA,
+            email: email,
+            telephone: telephone,
+            contact2: contact2,
+            email2: email2,
+            telephone2: telephone2,
+            entreprise: entreprise,
+            adressePostale: adressePostale,
+            prestationType: prestationType,
+            OPCO: OPCO,
+            montantTTC: montant,
+            montantHT: montantHT,
+            dateDebut: dateDebut,
+            dateFin: dateFin,
+            statut: statut,
+            notes: notes,
+            quantiteParticipants: quantiteParticipants,
+            type: guessType,
+            documents: {},
+            utilisateur: currentUser
+        });
+        renderTable(guessType);
+    }
+    
+    saveData();
+    closeModal();
+    renderDashboard();
+}
+
+function deleteRecord(type, id) {
+    if (confirm('Supprimer ?')) {
+        data[type] = data[type].filter(r => r.id !== id);
+        renderTable(type);
+        saveData();
+        renderDashboard();
+    }
+}
+
+function exportData() {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'CRM_data_' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function triggerImport() {
+    document.getElementById('importFile').click();
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            data = imported;
+            saveData();
+            alert('✓ Données importées');
             renderDashboard();
+            renderTable('bilans');
+        } catch (err) {
+            alert('Erreur : fichier JSON invalide');
         }
-        
-        function updateFormationSelect() {
-            const sel = document.getElementById('form-formation-entreprise');
-            sel.innerHTML = crmData.entreprises.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
+    };
+    reader.readAsText(file);
+}
+
+// FICHE CLIENT FUNCTIONS
+let currentFicheClientId = null;
+
+function openFicheClientModal(type, id) {
+    const record = data[type].find(r => r.id === id);
+    if (!record) return;
+    
+    currentFicheClientId = id;
+    document.getElementById('fcClientName').value = record.clientName || '';
+    document.getElementById('fcEntreprise').value = record.entreprise || '';
+    document.getElementById('fcSIRET').value = record.SIRET || '';
+    document.getElementById('fcNumeroTVA').value = record.numeroTVA || '';
+    document.getElementById('fcAdressePostale').value = record.adressePostale || '';
+    document.getElementById('fcPrestationType').value = record.prestationType || '';
+    document.getElementById('fcOPCO').value = record.OPCO || '';
+    document.getElementById('fcMontantHT').value = record.montantHT || '';
+    document.getElementById('fcMontantTTC').value = record.montantTTC || '';
+    document.getElementById('fcDateDebut').value = record.dateDebut || '';
+    document.getElementById('fcDateFin').value = record.dateFin || '';
+    document.getElementById('fcStatut').value = record.statut || '';
+    document.getElementById('fcQuantiteParticipants').value = record.quantiteParticipants || '';
+    document.getElementById('fcNotes').value = record.notes || '';
+    document.getElementById('fcContact1').value = record.clientName || '';
+    document.getElementById('fcEmail1').value = record.email || '';
+    document.getElementById('fcTelephone1').value = record.telephone || '';
+    document.getElementById('fcContact2').value = record.contact2 || '';
+    document.getElementById('fcEmail2').value = record.email2 || '';
+    document.getElementById('fcTelephone2').value = record.telephone2 || '';
+    
+    // Formateur auto-rempli avec user actuel
+    document.getElementById('fcFormateur').value = currentUser || 'Edwige';
+    document.getElementById('fcEmailFormateur').value = getFormateur().email;
+    document.getElementById('fcTelephoneFormateur').value = getFormateur().telephone;
+    
+    document.getElementById('ficheClientModal').classList.add('active');
+}
+
+function getFormateur() {
+    const formateurData = {
+        'Edwige': { email: 'el.energie@orange.fr', telephone: '0681032047' },
+        'Florence': { email: 'florence@el-energie.fr', telephone: '06 XX XX XX XX' }
+    };
+    return formateurData[currentUser] || formateurData['Edwige'];
+}
+
+function closeFicheClientModal() {
+    document.getElementById('ficheClientModal').classList.remove('active');
+    currentFicheClientId = null;
+}
+
+function generateFicheClient() {
+    if (!currentFicheClientId) return;
+
+    // Récupérer les données de la modale Fiche Client
+    const record = data.formations.find(r => r.id === currentFicheClientId);
+    if (!record) return;
+
+    // Mettre à jour le record avec les données de la modale
+    record.clientName = document.getElementById('fcClientName').value;
+    record.entreprise = document.getElementById('fcEntreprise').value;
+    record.SIRET = document.getElementById('fcSIRET').value;
+    record.numeroTVA = document.getElementById('fcNumeroTVA').value;
+    record.adressePostale = document.getElementById('fcAdressePostale').value;
+    record.prestationType = document.getElementById('fcPrestationType').value;
+    record.OPCO = document.getElementById('fcOPCO').value;
+    record.montantHT = parseFloat(document.getElementById('fcMontantHT').value) || 0;
+    record.montantTTC = parseFloat(document.getElementById('fcMontantTTC').value) || 0;
+    record.dateDebut = document.getElementById('fcDateDebut').value;
+    record.dateFin = document.getElementById('fcDateFin').value;
+    record.quantiteParticipants = document.getElementById('fcQuantiteParticipants').value;
+    record.notes = document.getElementById('fcNotes').value;
+    record.clientName = document.getElementById('fcContact1').value;
+    record.email = document.getElementById('fcEmail1').value;
+    record.telephone = document.getElementById('fcTelephone1').value;
+    record.contact2 = document.getElementById('fcContact2').value;
+    record.email2 = document.getElementById('fcEmail2').value;
+    record.telephone2 = document.getElementById('fcTelephone2').value;
+    
+    // Sauvegarder
+    saveData();
+
+    // Envoyer au script pour générer la Fiche Client
+    const templateId = docTemplateMap['Fiche Client'];
+    if (!templateId) {
+        alert('⚠️ Template Fiche Client non configuré');
+        closeFicheClientModal();
+        return;
+    }
+
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbxq2RfH_rX7MoAoxfI0U9tEw4klIAUaXJ-NV_xJGmNlG0hKZnxTbtaQ74S_cvgSV275/exec";
+
+    const clientData = {
+        clientName: record.clientName,
+        formatateur: currentUser,
+        email: record.email,
+        telephone: record.telephone,
+        SIRET: record.SIRET || '',
+        numeroTVA: record.numeroTVA || '',
+        entreprise: record.entreprise,
+        adressePostale: record.adressePostale || '',
+        prestationType: record.prestationType,
+        OPCO: record.OPCO || '',
+        montantTTC: record.montantTTC,
+        montantHT: record.montantHT || 0,
+        dateDebut: record.dateDebut || '',
+        dateFin: record.dateFin || '',
+        contact2: record.contact2 || '',
+        email2: record.email2 || '',
+        telephone2: record.telephone2 || '',
+        quantiteParticipants: record.quantiteParticipants || '',
+        listeStagiaires: getParticipantsOnly(currentFicheClientId)
+    };
+    
+    console.log('📤 DONNÉES ENVOYÉES AU SCRIPT:', clientData);
+    console.log('📄 DOC:', 'Fiche Client');
+    console.log('🔑 TEMPLATE ID:', templateId);
+
+    fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ clientData, docName: 'Fiche Client', templateId })
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('✓ RÉPONSE SCRIPT:', result);
+        if (result.success) {
+            console.log('✓ Fiche Client générée:', result.fileUrl);
+            alert('✓ Fiche Client générée!');
+        } else {
+            console.error('❌ Erreur:', result.error);
+            alert(`❌ Erreur: ${result.error}`);
         }
-        
-        function editFormation(id) {
-            const f = crmData.formations.find(x => x.id === id);
-            if (!f) return;
-            updateFormationSelect();
-            document.getElementById('form-formation-entreprise').value = f.entreprise;
-            document.getElementById('form-formation-nom').value = f.nom;
-            document.getElementById('form-formation-type').value = f.type;
-            document.getElementById('form-formation-intitule').value = f.intitule;
-            document.getElementById('form-formation-montant-ttc').value = f.montantTTC;
-            document.getElementById('form-formation-montant-ht').value = f.montantHT;
-            document.getElementById('form-formation-date-debut').value = f.dateDebut;
-            document.getElementById('form-formation-responsable').value = f.responsable;
-            document.getElementById('form-formation-statut').value = f.statut;
-            document.getElementById('form-formation-nb-participants').value = f.nbParticipants || 0;
-            const partsArray = Array.isArray(f.participants) ? f.participants : [];
-            document.getElementById('form-formation-participants').value = partsArray.join('\n');
-            openModalFormation();
+        closeFicheClientModal();
+        renderTable('formations');
+    })
+    .catch(err => {
+        console.error('❌ ERREUR FETCH:', err);
+        alert('❌ Erreur de connexion');
+        closeFicheClientModal();
+    });
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    applyUserColors();
+    renderDashboard();
+    renderTable('bilans');
+    renderTable('formations');
+    renderTable('animations');
+    renderTable('seminaires');
+    
+    // Listener pour afficher/masquer champs extras
+    document.getElementById('editPrestationType').addEventListener('change', toggleExtraFields);
+    document.getElementById('editPrestationType').addEventListener('input', toggleExtraFields);
+    
+    // Bloquer autocomplete Fiche Client
+    const ficheClientInputs = [
+        'fcClientName', 'fcEntreprise', 'fcEmail1', 'fcTelephone1', 
+        'fcContact2', 'fcEmail2', 'fcTelephone2', 'fcAdressePostale'
+    ];
+    
+    ficheClientInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('focus', () => {
+                input.setAttribute('autocomplete', 'off');
+            });
+            input.addEventListener('click', () => {
+                input.setAttribute('autocomplete', 'off');
+            });
         }
-        
-        function editEntreprise(id) {
-            const e = crmData.entreprises.find(x => x.id === id);
-            if (!e) return;
-            document.getElementById('form-entreprise-nom').value = e.nom;
-            document.getElementById('form-entreprise-contact1').value = e.contact1;
-            document.getElementById('form-entreprise-email1').value = e.email1;
-            document.getElementById('form-entreprise-tel1').value = e.tel1;
-            document.getElementById('form-entreprise-contact2').value = e.contact2;
-            document.getElementById('form-entreprise-email2').value = e.email2;
-            document.getElementById('form-entreprise-tel2').value = e.tel2;
-            document.getElementById('form-entreprise-statut').value = e.statut;
-            openModalEntreprise();
-        }
-        
-        function editBilan(id) {
-            const b = crmData.bilans.find(x => x.id === id);
-            if (!b) return;
-            document.getElementById('form-bilan-nom').value = b.nom;
-            document.getElementById('form-bilan-type').value = b.type;
-            document.getElementById('form-bilan-montant').value = b.montant;
-            document.getElementById('form-bilan-date-debut').value = b.dateDebut;
-            document.getElementById('form-bilan-statut').value = b.statut;
-            openModalBilan();
-        }
-        
-        async function generateDocuments(fId) {
-            const f = crmData.formations.find(x => x.id === fId);
-            const e = crmData.entreprises.find(x => x.id == f.entreprise);
-            if (!f || !e) { alert('Données manquantes'); return; }
-            
-            const payload = {
-                entreprise: e.nom,
-                nomClient: f.nom,
-                intituleFormation: f.intitule,
-                montantHT: f.montantHT,
-                montantTTC: f.montantTTC,
-                dateDebut: f.dateDebut,
-                responsable: f.responsable,
-                nbParticipants: f.nbParticipants,
-                participants: f.participants
-            };
-            
-            try {
-                const resp = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const txt = await resp.text();
-                alert('✓ Génération lancée:\n' + txt);
-                f.statut = 'Généré';
-                saveCRM();
-                renderAll();
-            } catch (err) {
-                alert('✗ Erreur: ' + err.message);
-            }
-        }
-        
-        initCRM();
-    </script>
+    });
+});
+</script>
+
 </body>
 </html>
