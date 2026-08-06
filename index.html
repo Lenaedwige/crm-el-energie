@@ -8,50 +8,38 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f5f5f5; color: #333; }
         .container { display: flex; height: 100vh; }
-        .sidebar { width: 220px; background: #0F4761; color: white; padding: 20px; overflow-y: auto; box-shadow: 2px 0 8px rgba(0,0,0,0.1); }
-        .sidebar h1 { font-size: 16px; margin-bottom: 30px; color: #F37322; font-weight: 600; }
-        .nav-group { margin-bottom: 25px; }
-        .nav-group-title { font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 10px; }
-        .nav-item { display: block; padding: 10px 12px; margin-bottom: 6px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; text-align: left; transition: all 0.2s; width: 100%; }
+        .sidebar { width: 220px; background: #0F4761; color: white; padding: 20px; overflow-y: auto; }
+        .sidebar h1 { font-size: 16px; margin-bottom: 30px; color: #F37322; }
+        .nav-item { display: block; width: 100%; padding: 10px; margin-bottom: 6px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; text-align: left; }
         .nav-item:hover, .nav-item.active { background: #F37322; }
         .main-content { flex: 1; padding: 30px; overflow-y: auto; }
         .section { display: none; }
         .section.active { display: block; }
         h2 { color: #0F4761; margin-bottom: 20px; font-size: 24px; }
-        .btn-group { margin-bottom: 20px; display: flex; gap: 10px; }
-        .btn { padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+        .btn { padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; }
         .btn-primary { background: #F37322; color: white; }
         .btn-primary:hover { background: #e06a1b; }
         .btn-secondary { background: #e0e0e0; color: #333; }
-        .btn-secondary:hover { background: #d0d0d0; }
         .btn-sm { padding: 4px 8px; font-size: 11px; }
-        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
         thead { background: #0F4761; color: white; }
         th { padding: 12px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; }
         td { padding: 10px; border-bottom: 1px solid #eee; font-size: 12px; }
-        tr:hover { background: #f9f9f9; }
         .badge { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
-        .badge-edwige { background: #0F4761; color: white; }
-        .badge-florence { background: #F37322; color: white; }
-        .status-draft { background: #e0e0e0; color: #333; }
-        .status-ready { background: #4CAF50; color: white; }
-        .status-sent { background: #2196F3; color: white; }
-        .status-signed { background: #9C27B0; color: white; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto; padding: 20px; }
-        .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; border-radius: 8px; padding: 30px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-        .modal-content h3 { color: #0F4761; margin-bottom: 20px; font-size: 18px; }
+        .badge-draft { background: #e0e0e0; color: #333; }
+        .badge-ready { background: #4CAF50; color: white; }
+        .badge-sent { background: #2196F3; color: white; }
+        .badge-signed { background: #9C27B0; color: white; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 8px; padding: 30px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }
         .form-group { margin-bottom: 16px; }
         label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; color: #0F4761; text-transform: uppercase; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #F37322; box-shadow: 0 0 0 3px rgba(243,115,34,0.1); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #F37322; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 24px; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
         .modal-buttons button { flex: 1; }
-        .contact-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .contact-card h3 { color: #0F4761; margin-bottom: 20px; font-size: 18px; }
-        .contact-card div { margin-bottom: 12px; line-height: 1.6; }
-        .contact-label { font-weight: 600; color: #F37322; display: inline-block; min-width: 120px; }
         .actions { display: flex; gap: 6px; }
     </style>
 </head>
@@ -59,61 +47,80 @@
     <div class="container">
         <div class="sidebar">
             <h1>EL-ÉNERGIE</h1>
-            <div class="nav-group">
-                <div class="nav-group-title">Navigation</div>
-                <button class="nav-item active" onclick="switchTab('entreprises')">Entreprises</button>
-                <button class="nav-item" onclick="switchTab('formations')">Formations</button>
-                <button class="nav-item" onclick="switchTab('bilans')">Bilans</button>
-                <button class="nav-item" onclick="switchTab('contacts')">Contacts</button>
-                <button class="nav-item" onclick="switchTab('dashboard')">Dashboard</button>
-            </div>
-            <div class="nav-group">
-                <div class="nav-group-title">Outils</div>
-                <button class="nav-item" onclick="exportData()">Exporter JSON</button>
-                <button class="nav-item" onclick="importData()">Importer JSON</button>
-            </div>
+            <button class="nav-item active" onclick="switchTab('formations')">Formations</button>
+            <button class="nav-item" onclick="switchTab('entreprises')">Entreprises</button>
+            <button class="nav-item" onclick="switchTab('bilans')">Bilans</button>
+            <button class="nav-item" onclick="switchTab('contacts')">Contacts</button>
+            <button class="nav-item" onclick="switchTab('dashboard')">Dashboard</button>
         </div>
         
         <div class="main-content">
-            <!-- ENTREPRISES -->
-            <section class="section active" id="section-entreprises">
-                <h2>Entreprises</h2>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="openModalEntreprise()">+ Ajouter entreprise</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr><th>Entreprise</th><th>Contact 1</th><th>Email 1</th><th>Tel 1</th><th>Contact 2</th><th>Email 2</th><th>Tel 2</th><th>Statut</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody id="table-entreprises"></tbody>
-                </table>
-            </section>
-            
             <!-- FORMATIONS -->
-            <section class="section" id="section-formations">
+            <section class="section active" id="section-formations">
                 <h2>Formations</h2>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="openModalFormation()">+ Ajouter formation</button>
-                </div>
+                <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openModalFormation()">+ Ajouter formation</button>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
-                            <tr><th>Entreprise</th><th>Nom</th><th>Intitulé</th><th>TTC</th><th>Statut</th><th>Participants</th><th>Diagnostic</th><th>Fiche Navette</th><th>Programme</th><th>Convention</th><th>Feuille Émarg</th><th>Attestation</th><th>Facture</th><th>Facture Acq</th><th>Actions</th></tr>
+                            <tr>
+                                <th>Entreprise</th>
+                                <th>Nom</th>
+                                <th>Intitulé</th>
+                                <th>TTC</th>
+                                <th>Statut</th>
+                                <th>Participants</th>
+                                <th>Diagnostic</th>
+                                <th>Fiche Navette</th>
+                                <th>Programme</th>
+                                <th>Convention</th>
+                                <th>Feuille Émarg</th>
+                                <th>Attestation</th>
+                                <th>Facture</th>
+                                <th>Facture Acq</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody id="table-formations"></tbody>
                     </table>
                 </div>
             </section>
             
+            <!-- ENTREPRISES -->
+            <section class="section" id="section-entreprises">
+                <h2>Entreprises</h2>
+                <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openModalEntreprise()">+ Ajouter entreprise</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entreprise</th>
+                            <th>Contact 1</th>
+                            <th>Email 1</th>
+                            <th>Tel 1</th>
+                            <th>Contact 2</th>
+                            <th>Email 2</th>
+                            <th>Tel 2</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-entreprises"></tbody>
+                </table>
+            </section>
+            
             <!-- BILANS -->
             <section class="section" id="section-bilans">
                 <h2>Bilans de Compétences</h2>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="openModalBilan()">+ Ajouter bilan</button>
-                </div>
+                <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openModalBilan()">+ Ajouter bilan</button>
                 <table>
                     <thead>
-                        <tr><th>Client</th><th>Type</th><th>Montant</th><th>Statut</th><th>Date</th><th>Actions</th></tr>
+                        <tr>
+                            <th>Client</th>
+                            <th>Type</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody id="table-bilans"></tbody>
                 </table>
@@ -122,17 +129,17 @@
             <!-- CONTACTS -->
             <section class="section" id="section-contacts">
                 <h2>Contacts</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
-                    <div class="contact-card">
-                        <h3>👤 Edwige Lena</h3>
-                        <div><span class="contact-label">Téléphone:</span> 0681032047</div>
-                        <div><span class="contact-label">Email:</span> el.energie@orange.fr</div>
-                        <div><span class="contact-label">Adresse:</span> 83 Boulevard des Vagues, 13008 Marseille</div>
+                <div style="margin-top: 30px;">
+                    <div style="background: white; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                        <h3 style="color: #0F4761; margin-bottom: 15px;">Edwige Lena</h3>
+                        <div style="margin-bottom: 10px;"><strong>Tel:</strong> 0681032047</div>
+                        <div style="margin-bottom: 10px;"><strong>Email:</strong> el.energie@orange.fr</div>
+                        <div><strong>Adresse:</strong> 83 Boulevard des Vagues, 13008 Marseille</div>
                     </div>
-                    <div class="contact-card">
-                        <h3>👤 Florence Benoliel</h3>
-                        <div><span class="contact-label">Téléphone:</span> 0663735521</div>
-                        <div><span class="contact-label">Email:</span> fgabalda@gmail.com</div>
+                    <div style="background: white; padding: 20px; border-radius: 4px;">
+                        <h3 style="color: #0F4761; margin-bottom: 15px;">Florence Benoliel</h3>
+                        <div style="margin-bottom: 10px;"><strong>Tel:</strong> 0663735521</div>
+                        <div><strong>Email:</strong> fgabalda@gmail.com</div>
                     </div>
                 </div>
             </section>
@@ -145,10 +152,42 @@
         </div>
     </div>
     
+    <!-- MODAL FORMATION -->
+    <div class="modal" id="modal-formation">
+        <div class="modal-content">
+            <h3 style="color: #0F4761; margin-bottom: 20px;">Formation</h3>
+            <div class="form-row">
+                <div class="form-group"><label>Entreprise</label><select id="form-formation-entreprise"></select></div>
+                <div class="form-group"><label>Nom du Client</label><input type="text" id="form-formation-nom"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Type</label><select id="form-formation-type"><option>GDI</option><option>QVCT</option><option>DISC</option><option>Coaching</option></select></div>
+                <div class="form-group"><label>Intitulé</label><input type="text" id="form-formation-intitule"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc" onchange="calculateHT()"></div>
+                <div class="form-group"><label>Montant HT</label><input type="number" id="form-formation-montant-ht" readonly></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Date Début</label><input type="date" id="form-formation-date-debut"></div>
+                <div class="form-group"><label>Responsable</label><select id="form-formation-responsable"><option>Edwige</option><option>Florence</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Nombre de Participants</label><input type="number" id="form-formation-nb-participants" min="0"></div>
+                <div class="form-group"><label>Statut</label><select id="form-formation-statut"><option>À générer</option><option>Généré</option><option>Envoyé</option><option>Signé</option></select></div>
+            </div>
+            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" style="height: 180px; resize: vertical;"></textarea></div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="saveFormation()">Enregistrer</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-formation')">Annuler</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- MODAL ENTREPRISE -->
     <div class="modal" id="modal-entreprise">
         <div class="modal-content">
-            <h3>Entreprise</h3>
+            <h3 style="color: #0F4761; margin-bottom: 20px;">Entreprise</h3>
             <div class="form-group"><label>Nom</label><input type="text" id="form-entreprise-nom"></div>
             <div class="form-row">
                 <div class="form-group"><label>Contact 1</label><input type="text" id="form-entreprise-contact1"></div>
@@ -160,7 +199,7 @@
                 <div class="form-group"><label>Email 2</label><input type="email" id="form-entreprise-email2"></div>
             </div>
             <div class="form-group"><label>Téléphone 2</label><input type="tel" id="form-entreprise-tel2"></div>
-            <div class="form-group"><label>Statut</label><select id="form-entreprise-statut"><option value="Prospection">Prospection</option><option value="Contact pris">Contact pris</option><option value="Client">Client</option></select></div>
+            <div class="form-group"><label>Statut</label><select id="form-entreprise-statut"><option>Prospection</option><option>Contact pris</option><option>Client</option></select></div>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="saveEntreprise()">Enregistrer</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-entreprise')">Annuler</button>
@@ -168,49 +207,17 @@
         </div>
     </div>
     
-    <!-- MODAL FORMATION -->
-    <div class="modal" id="modal-formation">
-        <div class="modal-content">
-            <h3>Formation</h3>
-            <div class="form-row">
-                <div class="form-group"><label>Entreprise</label><select id="form-formation-entreprise"></select></div>
-                <div class="form-group"><label>Nom du Client</label><input type="text" id="form-formation-nom"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Type</label><select id="form-formation-type"><option value="GDI">GDI</option><option value="QVCT">QVCT</option><option value="DISC">DISC</option><option value="Coaching">Coaching</option></select></div>
-                <div class="form-group"><label>Intitulé</label><input type="text" id="form-formation-intitule"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc" onchange="calculateHT()"></div>
-                <div class="form-group"><label>Montant HT</label><input type="number" id="form-formation-montant-ht" readonly></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Date Début</label><input type="date" id="form-formation-date-debut"></div>
-                <div class="form-group"><label>Responsable</label><select id="form-formation-responsable"><option value="Edwige">Edwige</option><option value="Florence">Florence</option></select></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Nombre de Participants</label><input type="number" id="form-formation-nb-participants" min="0"></div>
-                <div class="form-group"><label>Statut</label><select id="form-formation-statut"><option value="À générer">À générer</option><option value="Généré">Généré</option><option value="Envoyé">Envoyé</option><option value="Signé">Signé</option></select></div>
-            </div>
-            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" style="height: 180px; resize: vertical;"></textarea></div>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="saveFormation()">Enregistrer</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-formation')">Annuler</button>
-            </div>
-        </div>
-    </div>
-    
     <!-- MODAL BILAN -->
     <div class="modal" id="modal-bilan">
         <div class="modal-content">
-            <h3>Bilan de Compétences</h3>
+            <h3 style="color: #0F4761; margin-bottom: 20px;">Bilan</h3>
             <div class="form-group"><label>Nom du Client</label><input type="text" id="form-bilan-nom"></div>
-            <div class="form-group"><label>Type</label><select id="form-bilan-type"><option value="Essentiel">Bilan Essentiel</option><option value="Premium">Bilan Premium</option></select></div>
+            <div class="form-group"><label>Type</label><select id="form-bilan-type"><option>Essentiel</option><option>Premium</option></select></div>
             <div class="form-row">
                 <div class="form-group"><label>Montant TTC</label><input type="number" id="form-bilan-montant"></div>
                 <div class="form-group"><label>Date Début</label><input type="date" id="form-bilan-date-debut"></div>
             </div>
-            <div class="form-group"><label>Statut</label><select id="form-bilan-statut"><option value="Prise de contact">Prise de contact</option><option value="En cours">En cours</option><option value="Terminé">Terminé</option></select></div>
+            <div class="form-group"><label>Statut</label><select id="form-bilan-statut"><option>Prise de contact</option><option>En cours</option><option>Terminé</option></select></div>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="saveBilan()">Enregistrer</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-bilan')">Annuler</button>
@@ -220,6 +227,12 @@
 
     <script>
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwNnFpBYCHJL-B0ua-KrYz6vK16CcaA0TQjAYP6SA_0hC4Gas9r_H-BtnnWSZzKv6oTsQ/exec';
+        const DOC_LINKS = {
+            diagnostic: '1nce_ZaplWutY-RhllB_Eso96GOgN5D5hujVPpy3Emkk',
+            ficheNavette: '13plfhCGXsfzIwR1bwUzwhmsr6td9rsLz',
+            programme: '1biTmVtzEEjPG5T0e5s_7EjXc5VqC5ZEgR43dRmM0BIo',
+            convention: '1-gvct63yaMLfYcBIj4QZ4OUJ5lzW2S871vxpa8zpEGM'
+        };
         let crmData = { entreprises: [], formations: [], bilans: [] };
         
         function calculateHT() {
@@ -235,34 +248,18 @@
         }
         
         function saveCRM() { localStorage.setItem('el-energie-crm-v8', JSON.stringify(crmData)); }
+        
         function switchTab(tab) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(s => s.classList.remove('active'));
             document.getElementById('section-' + tab).classList.add('active');
             event.target.classList.add('active');
         }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openModalEntreprise() { document.getElementById('modal-entreprise').classList.add('active'); }
-        function openModalFormation() { document.getElementById('modal-formation').classList.add('active'); updateFormationSelect(); }
-        function openModalBilan() { document.getElementById('modal-bilan').classList.add('active'); }
         
-        function saveEntreprise() {
-            const e = {
-                id: Date.now(),
-                nom: document.getElementById('form-entreprise-nom').value,
-                contact1: document.getElementById('form-entreprise-contact1').value,
-                email1: document.getElementById('form-entreprise-email1').value,
-                tel1: document.getElementById('form-entreprise-tel1').value,
-                contact2: document.getElementById('form-entreprise-contact2').value,
-                email2: document.getElementById('form-entreprise-email2').value,
-                tel2: document.getElementById('form-entreprise-tel2').value,
-                statut: document.getElementById('form-entreprise-statut').value
-            };
-            crmData.entreprises.push(e);
-            saveCRM();
-            closeModal('modal-entreprise');
-            renderAll();
-        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openModalFormation() { document.getElementById('modal-formation').classList.add('active'); updateFormationSelect(); }
+        function openModalEntreprise() { document.getElementById('modal-entreprise').classList.add('active'); }
+        function openModalBilan() { document.getElementById('modal-bilan').classList.add('active'); }
         
         function saveFormation() {
             const ttc = parseFloat(document.getElementById('form-formation-montant-ttc').value) || 0;
@@ -297,6 +294,24 @@
             renderAll();
         }
         
+        function saveEntreprise() {
+            const e = {
+                id: Date.now(),
+                nom: document.getElementById('form-entreprise-nom').value,
+                contact1: document.getElementById('form-entreprise-contact1').value,
+                email1: document.getElementById('form-entreprise-email1').value,
+                tel1: document.getElementById('form-entreprise-tel1').value,
+                contact2: document.getElementById('form-entreprise-contact2').value,
+                email2: document.getElementById('form-entreprise-email2').value,
+                tel2: document.getElementById('form-entreprise-tel2').value,
+                statut: document.getElementById('form-entreprise-statut').value
+            };
+            crmData.entreprises.push(e);
+            saveCRM();
+            closeModal('modal-entreprise');
+            renderAll();
+        }
+        
         function saveBilan() {
             const b = {
                 id: Date.now(),
@@ -312,11 +327,42 @@
             renderAll();
         }
         
-        function renderAll() {
-            renderEntreprises();
-            renderFormations();
-            renderBilans();
-            renderDashboard();
+        function renderFormations() {
+            const tbody = document.getElementById('table-formations');
+            tbody.innerHTML = crmData.formations.map(f => {
+                const ent = crmData.entreprises.find(e => e.id == f.entreprise);
+                const parts = Array.isArray(f.participants) ? f.participants.join(', ') : '-';
+                const getClass = (status) => {
+                    if (status === 'À générer') return 'badge badge-draft';
+                    if (status === 'Généré') return 'badge badge-ready';
+                    if (status === 'Envoyé') return 'badge badge-sent';
+                    if (status === 'Signé') return 'badge badge-signed';
+                    return 'badge badge-draft';
+                };
+                const link = (docType, id) => {
+                    if (!id) return `<span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span>`;
+                    return `<a href="https://docs.google.com/document/d/${id}/edit" target="_blank" style="text-decoration: none;"><span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span></a>`;
+                };
+                return `
+                    <tr>
+                        <td><strong>${ent ? ent.nom : 'N/A'}</strong></td>
+                        <td>${f.nom}</td>
+                        <td>${f.intitule}</td>
+                        <td>${f.montantTTC.toFixed(2)}€</td>
+                        <td><span class="badge">${f.statut}</span></td>
+                        <td><strong>${f.nbParticipants || 0}</strong> - ${parts.substring(0, 20)}${parts.length > 20 ? '...' : ''}</td>
+                        <td>${link('diagnostic', DOC_LINKS.diagnostic)}</td>
+                        <td>${link('ficheNavette', DOC_LINKS.ficheNavette)}</td>
+                        <td>${link('programme', DOC_LINKS.programme)}</td>
+                        <td>${link('convention', DOC_LINKS.convention)}</td>
+                        <td><span class="${getClass(f.feuilleEmargement || 'À générer')}">${f.feuilleEmargement || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.attestation || 'À générer')}">${f.attestation || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.facture || 'À générer')}">${f.facture || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.factureAcquitte || 'À générer')}">${f.factureAcquitte || 'À générer'}</span></td>
+                        <td><div class="actions"><button class="btn btn-sm btn-secondary" onclick="editFormation(${f.id})">Éditer</button><button class="btn btn-sm btn-primary" onclick="generateDocuments(${f.id})">Générer</button></div></td>
+                    </tr>
+                `;
+            }).join('');
         }
         
         function renderEntreprises() {
@@ -334,55 +380,6 @@
                     <td><button class="btn btn-sm btn-secondary" onclick="editEntreprise(${e.id})">Modifier</button></td>
                 </tr>
             `).join('');
-        }
-        
-        function renderFormations() {
-            const tbody = document.getElementById('table-formations');
-            const docLinks = {
-                diagnostic: '1nce_ZaplWutY-RhllB_Eso96GOgN5D5hujVPpy3Emkk',
-                ficheNavette: '13plfhCGXsfzIwR1bwUzwhmsr6td9rsLz',
-                programme: '1biTmVtzEEjPG5T0e5s_7EjXc5VqC5ZEgR43dRmM0BIo',
-                convention: '1-gvct63yaMLfYcBIj4QZ4OUJ5lzW2S871vxpa8zpEGM',
-                feuilleEmargement: '',
-                attestation: '',
-                facture: '',
-                factureAcquitte: ''
-            };
-            
-            tbody.innerHTML = crmData.formations.map(f => {
-                const ent = crmData.entreprises.find(e => e.id == f.entreprise);
-                const parts = Array.isArray(f.participants) ? f.participants.join(', ') : '-';
-                const getClass = (status) => {
-                    if (status === 'À générer') return 'badge status-draft';
-                    if (status === 'Généré') return 'badge status-ready';
-                    if (status === 'Envoyé') return 'badge status-sent';
-                    if (status === 'Signé') return 'badge status-signed';
-                    return 'badge status-draft';
-                };
-                const link = (docType, id) => {
-                    if (!id) return `<span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span>`;
-                    return `<a href="https://docs.google.com/document/d/${id}/edit" target="_blank" style="text-decoration: none;"><span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span></a>`;
-                };
-                return `
-                    <tr>
-                        <td><strong>${ent ? ent.nom : 'N/A'}</strong></td>
-                        <td>${f.nom}</td>
-                        <td>${f.intitule}</td>
-                        <td>${f.montantTTC.toFixed(2)}€</td>
-                        <td><span class="badge">${f.statut}</span></td>
-                        <td><strong>${f.nbParticipants || 0}</strong> - ${parts.substring(0, 30)}${parts.length > 30 ? '...' : ''}</td>
-                        <td>${link('diagnostic', docLinks.diagnostic)}</td>
-                        <td>${link('ficheNavette', docLinks.ficheNavette)}</td>
-                        <td>${link('programme', docLinks.programme)}</td>
-                        <td>${link('convention', docLinks.convention)}</td>
-                        <td>${link('feuilleEmargement', docLinks.feuilleEmargement)}</td>
-                        <td>${link('attestation', docLinks.attestation)}</td>
-                        <td>${link('facture', docLinks.facture)}</td>
-                        <td>${link('factureAcquitte', docLinks.factureAcquitte)}</td>
-                        <td><div class="actions"><button class="btn btn-sm btn-secondary" onclick="editFormation(${f.id})">Éditer</button><button class="btn btn-sm btn-primary" onclick="generateDocuments(${f.id})">Générer</button></div></td>
-                    </tr>
-                `;
-            }).join('');
         }
         
         function renderBilans() {
@@ -408,31 +405,36 @@
             
             div.innerHTML = `
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);"><div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Formations</div><div style="font-size: 32px; font-weight: bold; color: #0F4761;">${totalF}</div></div>
-                    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);"><div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Participants</div><div style="font-size: 32px; font-weight: bold; color: #F37322;">${totalPers}</div></div>
-                    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);"><div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Bilans</div><div style="font-size: 32px; font-weight: bold; color: #4CAF50;">${totalB}</div></div>
-                    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);"><div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">CA TTC</div><div style="font-size: 28px; font-weight: bold; color: #2196F3;">${totalCA.toFixed(0)}€</div></div>
+                    <div style="background: white; padding: 20px; border-radius: 4px;">
+                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Formations</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #0F4761;">${totalF}</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 4px;">
+                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Participants</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #F37322;">${totalPers}</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 4px;">
+                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">Bilans</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #4CAF50;">${totalB}</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 4px;">
+                        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 10px;">CA TTC</div>
+                        <div style="font-size: 28px; font-weight: bold; color: #2196F3;">${totalCA.toFixed(0)}€</div>
+                    </div>
                 </div>
             `;
+        }
+        
+        function renderAll() {
+            renderFormations();
+            renderEntreprises();
+            renderBilans();
+            renderDashboard();
         }
         
         function updateFormationSelect() {
             const sel = document.getElementById('form-formation-entreprise');
             sel.innerHTML = crmData.entreprises.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-        }
-        
-        function editEntreprise(id) {
-            const e = crmData.entreprises.find(x => x.id === id);
-            if (!e) return;
-            document.getElementById('form-entreprise-nom').value = e.nom;
-            document.getElementById('form-entreprise-contact1').value = e.contact1;
-            document.getElementById('form-entreprise-email1').value = e.email1;
-            document.getElementById('form-entreprise-tel1').value = e.tel1;
-            document.getElementById('form-entreprise-contact2').value = e.contact2;
-            document.getElementById('form-entreprise-email2').value = e.email2;
-            document.getElementById('form-entreprise-tel2').value = e.tel2;
-            document.getElementById('form-entreprise-statut').value = e.statut;
-            openModalEntreprise();
         }
         
         function editFormation(id) {
@@ -452,6 +454,20 @@
             const partsArray = Array.isArray(f.participants) ? f.participants : [];
             document.getElementById('form-formation-participants').value = partsArray.join('\n');
             openModalFormation();
+        }
+        
+        function editEntreprise(id) {
+            const e = crmData.entreprises.find(x => x.id === id);
+            if (!e) return;
+            document.getElementById('form-entreprise-nom').value = e.nom;
+            document.getElementById('form-entreprise-contact1').value = e.contact1;
+            document.getElementById('form-entreprise-email1').value = e.email1;
+            document.getElementById('form-entreprise-tel1').value = e.tel1;
+            document.getElementById('form-entreprise-contact2').value = e.contact2;
+            document.getElementById('form-entreprise-email2').value = e.email2;
+            document.getElementById('form-entreprise-tel2').value = e.tel2;
+            document.getElementById('form-entreprise-statut').value = e.statut;
+            openModalEntreprise();
         }
         
         function editBilan(id) {
@@ -492,35 +508,6 @@
             } catch (err) {
                 alert('✗ Erreur: ' + err.message);
             }
-        }
-        
-        function exportData() {
-            const blob = new Blob([JSON.stringify(crmData, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'crm-export.json';
-            a.click();
-        }
-        
-        function importData() {
-            const inp = document.createElement('input');
-            inp.type = 'file';
-            inp.accept = 'application/json';
-            inp.onchange = e => {
-                const reader = new FileReader();
-                reader.onload = evt => {
-                    try {
-                        crmData = JSON.parse(evt.target.result);
-                        saveCRM();
-                        renderAll();
-                        alert('✓ Import OK');
-                    } catch (err) {
-                        alert('✗ Erreur: ' + err.message);
-                    }
-                };
-                reader.readAsText(e.target.files[0]);
-            };
-            inp.click();
         }
         
         initCRM();
