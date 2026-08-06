@@ -11,9 +11,9 @@
         .sidebar { width: 220px; background: #0F4761; color: white; padding: 20px; overflow-y: auto; box-shadow: 2px 0 8px rgba(0,0,0,0.1); }
         .sidebar h1 { font-size: 16px; margin-bottom: 30px; color: #F37322; font-weight: 600; }
         .nav-group { margin-bottom: 25px; }
-        .nav-group-title { font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 10px; letter-spacing: 0.5px; }
+        .nav-group-title { font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 10px; }
         .nav-item { display: block; padding: 10px 12px; margin-bottom: 6px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; text-align: left; transition: all 0.2s; width: 100%; }
-        .nav-item:hover, .nav-item.active { background: #F37322; color: white; }
+        .nav-item:hover, .nav-item.active { background: #F37322; }
         .main-content { flex: 1; padding: 30px; overflow-y: auto; }
         .section { display: none; }
         .section.active { display: block; }
@@ -24,10 +24,11 @@
         .btn-primary:hover { background: #e06a1b; }
         .btn-secondary { background: #e0e0e0; color: #333; }
         .btn-secondary:hover { background: #d0d0d0; }
+        .btn-sm { padding: 4px 8px; font-size: 11px; }
         table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; font-size: 12px; }
         thead { background: #0F4761; color: white; }
         th { padding: 12px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 12px; cursor: pointer; }
+        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 12px; }
         tr:hover { background: #f9f9f9; }
         .badge { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
         .badge-edwige { background: #0F4761; color: white; }
@@ -41,7 +42,7 @@
         .modal-content { background: white; border-radius: 8px; padding: 30px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
         .modal-content h3 { color: #0F4761; margin-bottom: 20px; font-size: 18px; }
         .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; color: #0F4761; text-transform: uppercase; letter-spacing: 0.5px; }
+        label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; color: #0F4761; text-transform: uppercase; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: #F37322; box-shadow: 0 0 0 3px rgba(243,115,34,0.1); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -51,6 +52,7 @@
         .contact-card h3 { color: #0F4761; margin-bottom: 20px; font-size: 18px; }
         .contact-card div { margin-bottom: 12px; line-height: 1.6; }
         .contact-label { font-weight: 600; color: #F37322; display: inline-block; min-width: 120px; }
+        .actions { display: flex; gap: 6px; }
     </style>
 </head>
 <body>
@@ -62,7 +64,6 @@
                 <button class="nav-item active" onclick="switchTab('entreprises')">Entreprises</button>
                 <button class="nav-item" onclick="switchTab('formations')">Formations</button>
                 <button class="nav-item" onclick="switchTab('bilans')">Bilans</button>
-                <button class="nav-item" onclick="switchTab('suivi-docs')">Suivi Docs</button>
                 <button class="nav-item" onclick="switchTab('contacts')">Contacts</button>
                 <button class="nav-item" onclick="switchTab('dashboard')">Dashboard</button>
             </div>
@@ -82,7 +83,7 @@
                 </div>
                 <table>
                     <thead>
-                        <tr><th>Entreprise</th><th>Contact 1</th><th>Email 1</th><th>Tel 1</th><th>Contact 2</th><th>Email 2</th><th>Tel 2</th><th>Statut</th></tr>
+                        <tr><th>Entreprise</th><th>Contact 1</th><th>Email 1</th><th>Tel 1</th><th>Contact 2</th><th>Email 2</th><th>Tel 2</th><th>Statut</th><th>Actions</th></tr>
                     </thead>
                     <tbody id="table-entreprises"></tbody>
                 </table>
@@ -97,7 +98,7 @@
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
-                            <tr><th>Entreprise</th><th>Nom</th><th>Type</th><th>HT</th><th>TTC</th><th>Resp</th><th>Statut</th><th>Nb Pers</th><th>Diagnostic</th><th>Fiche Navette</th><th>Programme</th><th>Convention</th><th>Convocation</th><th>Feuille d'émargement</th><th>Attestation</th><th>Participants</th><th>Facture</th><th>Facture Acq.</th><th>Action</th></tr>
+                            <tr><th>Entreprise</th><th>Nom</th><th>Intitulé</th><th>TTC</th><th>Statut</th><th>Participants</th><th>Diagnostic</th><th>Fiche Navette</th><th>Programme</th><th>Convention</th><th>Feuille Émarg</th><th>Attestation</th><th>Facture</th><th>Facture Acq</th><th>Actions</th></tr>
                         </thead>
                         <tbody id="table-formations"></tbody>
                     </table>
@@ -112,16 +113,10 @@
                 </div>
                 <table>
                     <thead>
-                        <tr><th>Client</th><th>Type</th><th>Montant</th><th>Statut</th><th>Date</th><th>Responsable</th></tr>
+                        <tr><th>Client</th><th>Type</th><th>Montant</th><th>Statut</th><th>Date</th><th>Actions</th></tr>
                     </thead>
                     <tbody id="table-bilans"></tbody>
                 </table>
-            </section>
-            
-            <!-- SUIVI DOCS -->
-            <section class="section" id="section-suivi-docs">
-                <h2>Suivi des Documents</h2>
-                <div id="suivi-content"></div>
             </section>
             
             <!-- CONTACTS -->
@@ -154,17 +149,17 @@
     <div class="modal" id="modal-entreprise">
         <div class="modal-content">
             <h3>Entreprise</h3>
-            <div class="form-group"><label>Nom</label><input type="text" id="form-entreprise-nom" placeholder="Nom de l'entreprise"></div>
+            <div class="form-group"><label>Nom</label><input type="text" id="form-entreprise-nom"></div>
             <div class="form-row">
-                <div class="form-group"><label>Contact 1</label><input type="text" id="form-entreprise-contact1" placeholder="Nom complet"></div>
-                <div class="form-group"><label>Email 1</label><input type="email" id="form-entreprise-email1" placeholder="Email"></div>
+                <div class="form-group"><label>Contact 1</label><input type="text" id="form-entreprise-contact1"></div>
+                <div class="form-group"><label>Email 1</label><input type="email" id="form-entreprise-email1"></div>
             </div>
-            <div class="form-group"><label>Téléphone 1</label><input type="tel" id="form-entreprise-tel1" placeholder="Téléphone"></div>
+            <div class="form-group"><label>Téléphone 1</label><input type="tel" id="form-entreprise-tel1"></div>
             <div class="form-row">
-                <div class="form-group"><label>Contact 2</label><input type="text" id="form-entreprise-contact2" placeholder="Nom complet"></div>
-                <div class="form-group"><label>Email 2</label><input type="email" id="form-entreprise-email2" placeholder="Email"></div>
+                <div class="form-group"><label>Contact 2</label><input type="text" id="form-entreprise-contact2"></div>
+                <div class="form-group"><label>Email 2</label><input type="email" id="form-entreprise-email2"></div>
             </div>
-            <div class="form-group"><label>Téléphone 2</label><input type="tel" id="form-entreprise-tel2" placeholder="Téléphone"></div>
+            <div class="form-group"><label>Téléphone 2</label><input type="tel" id="form-entreprise-tel2"></div>
             <div class="form-group"><label>Statut</label><select id="form-entreprise-statut"><option value="Prospection">Prospection</option><option value="Contact pris">Contact pris</option><option value="Client">Client</option></select></div>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="saveEntreprise()">Enregistrer</button>
@@ -179,25 +174,25 @@
             <h3>Formation</h3>
             <div class="form-row">
                 <div class="form-group"><label>Entreprise</label><select id="form-formation-entreprise"></select></div>
-                <div class="form-group"><label>Nom du Client</label><input type="text" id="form-formation-nom" placeholder="Nom"></div>
+                <div class="form-group"><label>Nom du Client</label><input type="text" id="form-formation-nom"></div>
             </div>
             <div class="form-row">
                 <div class="form-group"><label>Type</label><select id="form-formation-type"><option value="GDI">GDI</option><option value="QVCT">QVCT</option><option value="DISC">DISC</option><option value="Coaching">Coaching</option></select></div>
-                <div class="form-group"><label>Intitulé</label><input type="text" id="form-formation-intitule" placeholder="Intitulé"></div>
+                <div class="form-group"><label>Intitulé</label><input type="text" id="form-formation-intitule"></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc" placeholder="0.00"></div>
-                <div class="form-group"><label>Montant HT</label><input type="number" id="form-formation-montant-ht" placeholder="Auto" readonly></div>
+                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc"></div>
+                <div class="form-group"><label>Montant HT</label><input type="number" id="form-formation-montant-ht" readonly></div>
             </div>
             <div class="form-row">
                 <div class="form-group"><label>Date Début</label><input type="date" id="form-formation-date-debut"></div>
                 <div class="form-group"><label>Responsable</label><select id="form-formation-responsable"><option value="Edwige">Edwige</option><option value="Florence">Florence</option></select></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Nombre de Participants</label><input type="number" id="form-formation-nb-participants" placeholder="0" min="0"></div>
+                <div class="form-group"><label>Nombre de Participants</label><input type="number" id="form-formation-nb-participants" min="0"></div>
                 <div class="form-group"><label>Statut</label><select id="form-formation-statut"><option value="À générer">À générer</option><option value="Généré">Généré</option><option value="Envoyé">Envoyé</option><option value="Signé">Signé</option></select></div>
             </div>
-            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" placeholder="Nom Prénom&#10;Nom Prénom" style="height: 100px;"></textarea></div>
+            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" style="height: 100px;"></textarea></div>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="saveFormation()">Enregistrer</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-formation')">Annuler</button>
@@ -209,10 +204,10 @@
     <div class="modal" id="modal-bilan">
         <div class="modal-content">
             <h3>Bilan de Compétences</h3>
-            <div class="form-group"><label>Nom du Client</label><input type="text" id="form-bilan-nom" placeholder="Nom complet"></div>
+            <div class="form-group"><label>Nom du Client</label><input type="text" id="form-bilan-nom"></div>
             <div class="form-group"><label>Type</label><select id="form-bilan-type"><option value="Essentiel">Bilan Essentiel</option><option value="Premium">Bilan Premium</option></select></div>
             <div class="form-row">
-                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-bilan-montant" placeholder="0.00"></div>
+                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-bilan-montant"></div>
                 <div class="form-group"><label>Date Début</label><input type="date" id="form-bilan-date-debut"></div>
             </div>
             <div class="form-group"><label>Statut</label><select id="form-bilan-statut"><option value="Prise de contact">Prise de contact</option><option value="En cours">En cours</option><option value="Terminé">Terminé</option></select></div>
@@ -228,12 +223,12 @@
         let crmData = { entreprises: [], formations: [], bilans: [] };
         
         function initCRM() {
-            const stored = localStorage.getItem('el-energie-crm-v6');
+            const stored = localStorage.getItem('el-energie-crm-v8');
             if (stored) try { crmData = JSON.parse(stored); } catch(e) { console.error(e); }
             renderAll();
         }
         
-        function saveCRM() { localStorage.setItem('el-energie-crm-v6', JSON.stringify(crmData)); }
+        function saveCRM() { localStorage.setItem('el-energie-crm-v8', JSON.stringify(crmData)); }
         function switchTab(tab) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(s => s.classList.remove('active'));
@@ -285,7 +280,6 @@
                 ficheNavette: 'À générer',
                 programme: 'À générer',
                 convention: 'À générer',
-                convocation: 'À générer',
                 feuilleEmargement: 'À générer',
                 attestation: 'À générer',
                 facture: 'À générer',
@@ -322,7 +316,7 @@
         function renderEntreprises() {
             const tbody = document.getElementById('table-entreprises');
             tbody.innerHTML = crmData.entreprises.map(e => `
-                <tr onclick="editEntreprise(${e.id})">
+                <tr>
                     <td><strong>${e.nom}</strong></td>
                     <td>${e.contact1}</td>
                     <td>${e.email1}</td>
@@ -331,6 +325,7 @@
                     <td>${e.email2}</td>
                     <td>${e.tel2}</td>
                     <td><span class="badge">${e.statut || '-'}</span></td>
+                    <td><button class="btn btn-sm btn-secondary" onclick="editEntreprise(${e.id})">Modifier</button></td>
                 </tr>
             `).join('');
         }
@@ -341,33 +336,29 @@
                 const ent = crmData.entreprises.find(e => e.id == f.entreprise);
                 const parts = Array.isArray(f.participants) ? f.participants.join(', ') : '-';
                 const getClass = (status) => {
-                    if (status === 'À générer') return 'badge';
+                    if (status === 'À générer') return 'badge status-draft';
                     if (status === 'Généré') return 'badge status-ready';
                     if (status === 'Envoyé') return 'badge status-sent';
                     if (status === 'Signé') return 'badge status-signed';
-                    return 'badge';
+                    return 'badge status-draft';
                 };
                 return `
                     <tr>
-                        <td onclick="editFormation(${f.id})"><strong>${ent ? ent.nom : 'N/A'}</strong></td>
-                        <td onclick="editFormation(${f.id})">${f.nom}</td>
-                        <td onclick="editFormation(${f.id})">${f.type}</td>
-                        <td onclick="editFormation(${f.id})">${f.montantHT.toFixed(2)}€</td>
-                        <td onclick="editFormation(${f.id})">${f.montantTTC.toFixed(2)}€</td>
-                        <td onclick="editFormation(${f.id})"><span class="badge ${f.responsable === 'Edwige' ? 'badge-edwige' : 'badge-florence'}">${f.responsable[0]}</span></td>
-                        <td onclick="editFormation(${f.id})"><span class="badge">${f.statut}</span></td>
-                        <td onclick="editFormation(${f.id})"><strong>${f.nbParticipants || 0}</strong></td>
-                        <td><span class="badge ${getClass(f.diagnostic || 'À générer')}">${f.diagnostic || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.ficheNavette || 'À générer')}">${f.ficheNavette || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.programme || 'À générer')}">${f.programme || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.convention || 'À générer')}">${f.convention || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.convocation || 'À générer')}">${f.convocation || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.feuilleEmargement || 'À générer')}">${f.feuilleEmargement || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.attestation || 'À générer')}">${f.attestation || 'À générer'}</span></td>
-                        <td style="font-size: 11px; color: #0F4761; max-width: 150px; overflow: hidden; text-overflow: ellipsis;">${parts}</td>
-                        <td><span class="badge ${getClass(f.facture || 'À générer')}">${f.facture || 'À générer'}</span></td>
-                        <td><span class="badge ${getClass(f.factureAcquitte || 'À générer')}">${f.factureAcquitte || 'À générer'}</span></td>
-                        <td><button class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="generateDocuments(${f.id})">Générer</button></td>
+                        <td><strong>${ent ? ent.nom : 'N/A'}</strong></td>
+                        <td>${f.nom}</td>
+                        <td>${f.intitule}</td>
+                        <td>${f.montantTTC.toFixed(2)}€</td>
+                        <td><span class="badge">${f.statut}</span></td>
+                        <td><strong>${f.nbParticipants || 0}</strong> - ${parts.substring(0, 30)}${parts.length > 30 ? '...' : ''}</td>
+                        <td><span class="${getClass(f.diagnostic || 'À générer')}">${f.diagnostic || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.ficheNavette || 'À générer')}">${f.ficheNavette || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.programme || 'À générer')}">${f.programme || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.convention || 'À générer')}">${f.convention || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.feuilleEmargement || 'À générer')}">${f.feuilleEmargement || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.attestation || 'À générer')}">${f.attestation || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.facture || 'À générer')}">${f.facture || 'À générer'}</span></td>
+                        <td><span class="${getClass(f.factureAcquitte || 'À générer')}">${f.factureAcquitte || 'À générer'}</span></td>
+                        <td><div class="actions"><button class="btn btn-sm btn-secondary" onclick="editFormation(${f.id})">Éditer</button><button class="btn btn-sm btn-primary" onclick="generateDocuments(${f.id})">Générer</button></div></td>
                     </tr>
                 `;
             }).join('');
@@ -376,13 +367,13 @@
         function renderBilans() {
             const tbody = document.getElementById('table-bilans');
             tbody.innerHTML = crmData.bilans.map(b => `
-                <tr onclick="editBilan(${b.id})">
+                <tr>
                     <td><strong>${b.nom}</strong></td>
                     <td>${b.type}</td>
                     <td>${b.montant.toFixed(2)}€</td>
                     <td><span class="badge">${b.statut}</span></td>
                     <td>${b.dateDebut || '-'}</td>
-                    <td><span class="badge badge-edwige">Edwige</span></td>
+                    <td><button class="btn btn-sm btn-secondary" onclick="editBilan(${b.id})">Modifier</button></td>
                 </tr>
             `).join('');
         }
