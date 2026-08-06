@@ -181,7 +181,7 @@
                 <div class="form-group"><label>Intitulé</label><input type="text" id="form-formation-intitule"></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc"></div>
+                <div class="form-group"><label>Montant TTC</label><input type="number" id="form-formation-montant-ttc" onchange="calculateHT()"></div>
                 <div class="form-group"><label>Montant HT</label><input type="number" id="form-formation-montant-ht" readonly></div>
             </div>
             <div class="form-row">
@@ -192,7 +192,7 @@
                 <div class="form-group"><label>Nombre de Participants</label><input type="number" id="form-formation-nb-participants" min="0"></div>
                 <div class="form-group"><label>Statut</label><select id="form-formation-statut"><option value="À générer">À générer</option><option value="Généré">Généré</option><option value="Envoyé">Envoyé</option><option value="Signé">Signé</option></select></div>
             </div>
-            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" style="height: 100px;"></textarea></div>
+            <div class="form-group"><label>Liste des Participants (un par ligne)</label><textarea id="form-formation-participants" style="height: 180px; resize: vertical;"></textarea></div>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="saveFormation()">Enregistrer</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-formation')">Annuler</button>
@@ -221,6 +221,12 @@
     <script>
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwNnFpBYCHJL-B0ua-KrYz6vK16CcaA0TQjAYP6SA_0hC4Gas9r_H-BtnnWSZzKv6oTsQ/exec';
         let crmData = { entreprises: [], formations: [], bilans: [] };
+        
+        function calculateHT() {
+            const ttc = parseFloat(document.getElementById('form-formation-montant-ttc').value) || 0;
+            const ht = parseFloat((ttc * 0.8).toFixed(2));
+            document.getElementById('form-formation-montant-ht').value = ht;
+        }
         
         function initCRM() {
             const stored = localStorage.getItem('el-energie-crm-v8');
