@@ -332,6 +332,17 @@
         
         function renderFormations() {
             const tbody = document.getElementById('table-formations');
+            const docLinks = {
+                diagnostic: '1nce_ZaplWutY-RhllB_Eso96GOgN5D5hujVPpy3Emkk',
+                ficheNavette: '13plfhCGXsfzIwR1bwUzwhmsr6td9rsLz',
+                programme: '1biTmVtzEEjPG5T0e5s_7EjXc5VqC5ZEgR43dRmM0BIo',
+                convention: '1-gvct63yaMLfYcBIj4QZ4OUJ5lzW2S871vxpa8zpEGM',
+                feuilleEmargement: '',
+                attestation: '',
+                facture: '',
+                factureAcquitte: ''
+            };
+            
             tbody.innerHTML = crmData.formations.map(f => {
                 const ent = crmData.entreprises.find(e => e.id == f.entreprise);
                 const parts = Array.isArray(f.participants) ? f.participants.join(', ') : '-';
@@ -342,6 +353,10 @@
                     if (status === 'Signé') return 'badge status-signed';
                     return 'badge status-draft';
                 };
+                const link = (docType, id) => {
+                    if (!id) return `<span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span>`;
+                    return `<a href="https://docs.google.com/document/d/${id}/edit" target="_blank" style="text-decoration: none;"><span class="${getClass(f[docType] || 'À générer')}">${f[docType] || 'À générer'}</span></a>`;
+                };
                 return `
                     <tr>
                         <td><strong>${ent ? ent.nom : 'N/A'}</strong></td>
@@ -350,14 +365,14 @@
                         <td>${f.montantTTC.toFixed(2)}€</td>
                         <td><span class="badge">${f.statut}</span></td>
                         <td><strong>${f.nbParticipants || 0}</strong> - ${parts.substring(0, 30)}${parts.length > 30 ? '...' : ''}</td>
-                        <td><span class="${getClass(f.diagnostic || 'À générer')}">${f.diagnostic || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.ficheNavette || 'À générer')}">${f.ficheNavette || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.programme || 'À générer')}">${f.programme || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.convention || 'À générer')}">${f.convention || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.feuilleEmargement || 'À générer')}">${f.feuilleEmargement || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.attestation || 'À générer')}">${f.attestation || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.facture || 'À générer')}">${f.facture || 'À générer'}</span></td>
-                        <td><span class="${getClass(f.factureAcquitte || 'À générer')}">${f.factureAcquitte || 'À générer'}</span></td>
+                        <td>${link('diagnostic', docLinks.diagnostic)}</td>
+                        <td>${link('ficheNavette', docLinks.ficheNavette)}</td>
+                        <td>${link('programme', docLinks.programme)}</td>
+                        <td>${link('convention', docLinks.convention)}</td>
+                        <td>${link('feuilleEmargement', docLinks.feuilleEmargement)}</td>
+                        <td>${link('attestation', docLinks.attestation)}</td>
+                        <td>${link('facture', docLinks.facture)}</td>
+                        <td>${link('factureAcquitte', docLinks.factureAcquitte)}</td>
                         <td><div class="actions"><button class="btn btn-sm btn-secondary" onclick="editFormation(${f.id})">Éditer</button><button class="btn btn-sm btn-primary" onclick="generateDocuments(${f.id})">Générer</button></div></td>
                     </tr>
                 `;
