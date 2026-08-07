@@ -478,12 +478,10 @@ function saveData() {
     localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
 }
 
-
-async function loadData() {
+function loadData() {
     const saved = localStorage.getItem('el-energie-crm-data-v2');
     if (saved) data = JSON.parse(saved);
 }
-
 
 function renderDashboard() {
     let bilans = data.bilans.filter(b => b.utilisateur === currentUser);
