@@ -1194,5 +1194,40 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+
+// ===== DIAGNOSTIC GENERATION =====
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx6T6-YVQ9_LQiLGcwD0O39s-SVMtG5rNVjqjY0mgtWM0P4rI3oVhg5R2XlO3lreXEi/exec';
+
+async function generateDiagnosticFromCRM(formation) {
+  const payload = {
+    action: 'generateDiagnostic',
+    clientData: {
+      intitule_formation: formation.prestationType || '',
+      date_debut: formation.dateDebut || '',
+      date_fin: formation.dateFin || '',
+      prenom_nom: formation.clientName || '',
+      entreprise: formation.entreprise || '',
+      adresse: formation.adressePostale || '',
+      montant_ht: formation.montantHT || '0',
+      montant_ttc: formation.montantTTC || '0',
+      responsable: formation.utilisateur || currentUser || 'Edwige'
+    }
+  };
+  
+  try {
+    const response = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const result = await response.json();
+    if (result.success) {
+      alert('✓ Diagnostic généré!\n\n' + result.url);
+      window.open(result.url, '_blank');
+    } else {
+      alert('❌ Erreur: ' + result.error);
+    }
+  } catch (err) {
+    alert('❌ Erreur: ' + err.toString());
+  }
+}
+</script>
+
 </body>
 </html>
