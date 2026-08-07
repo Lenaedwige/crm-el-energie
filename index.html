@@ -475,10 +475,38 @@ function applyUserColors() {
 }
 
 function saveData() {
+    // Fallback localStorage
     localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
 }
 
-function loadData() {
+async function syncToSheets() {
+    try {
+        console.log('💾 Sync Sheets...');
+        // À implémenter après test
+    } catch (err) {
+        console.log('(local only)');
+    }
+}
+
+async function loadData() {
+    try {
+        console.log('📥 Chargement depuis Sheets...');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwB4b6wifyIsnNZrUUQRPstrpPm50NhWH8XVCt1ZnqqrAe87O--qrq0ZOis_fkWs1zrug/exec?action=getData');
+        const sheetData = await response.json();
+        
+        if (sheetData.formations && sheetData.formations.length > 0) {
+            data.formations = sheetData.formations;
+            data.bilans = sheetData.bilans || [];
+            data.animations = sheetData.animations || [];
+            data.seminaires = sheetData.seminaires || [];
+            console.log('✓ Sheets chargé');
+            return;
+        }
+    } catch (err) {
+        console.log('Fallback localStorage');
+    }
+    
+    // Fallback localStorage
     const saved = localStorage.getItem('el-energie-crm-data-v2');
     if (saved) data = JSON.parse(saved);
 }
@@ -1162,7 +1190,7 @@ function generateFicheClient() {
 
 // Init
 document.addEventListener('DOMContentLoaded', () => {
-    loadData();
+    await loadData();
     applyUserColors();
     renderDashboard();
     renderTable('bilans');
