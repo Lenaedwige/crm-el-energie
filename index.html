@@ -1193,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxTS4MiBuJ_ufUzWqdsvck2DDcntA822pK-92bHQa47ehY1bn-1IGPeDJHNiDRKwJYwg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_AuBIctybsdsK33C6OZQFGWYh7OAj8YVXKoSSJHwDS8ObsgR9mleziGTLHT-pSB4yCw/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
