@@ -668,8 +668,6 @@ function renderTable(type) {
             html += '<td><span class="statut-badge ' + getStatutClass(r.statut) + '">' + r.statut + '</span></td>';
             
             // Bouton Fiche Client
-            html += '<td style="text-align: center;"><button class="btn-doc" onclick="generateDiagnosticFromCRM(r);" style="background: #4CAF50; color: white; border: none; padding: 6px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600; min-width: 70px; margin-right: 5px;">📋 Diagnostic</button><button onclick="openFicheClientModal(\'formations\', ' + r.id + ')" style="background: #FF6B9D; color: white; border: none; padding: 6px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600; min-width: 70px;">Fiche</button></td>';
-            
             // Colonnes documents (y compris Participants)
             docs.forEach(doc => {
                 if (doc === 'Participants') {
