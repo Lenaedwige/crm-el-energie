@@ -555,7 +555,7 @@ function generateDoc(type, clientId, docName) {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxegUK4qHg1zXD5_bNeH8oSB3hxluizIFpg9HixA5i6zRtNVcyOd_HuRkxWOii2CbAMdA/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbz-h3lUoW9y-m-DYV6GYYwt6QISu8dR4yNo7JhoAavzV17v3p-RtMs3u1WW3ANtlcOEow/exec";
 
     const clientData = {
         clientName: record.clientName,
@@ -1108,7 +1108,7 @@ function generateFicheClient() {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxegUK4qHg1zXD5_bNeH8oSB3hxluizIFpg9HixA5i6zRtNVcyOd_HuRkxWOii2CbAMdA/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbz-h3lUoW9y-m-DYV6GYYwt6QISu8dR4yNo7JhoAavzV17v3p-RtMs3u1WW3ANtlcOEow/exec";
 
     const clientData = {
         clientName: record.clientName,
@@ -1193,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxegUK4qHg1zXD5_bNeH8oSB3hxluizIFpg9HixA5i6zRtNVcyOd_HuRkxWOii2CbAMdA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-h3lUoW9y-m-DYV6GYYwt6QISu8dR4yNo7JhoAavzV17v3p-RtMs3u1WW3ANtlcOEow/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
