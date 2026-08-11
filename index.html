@@ -968,7 +968,7 @@ function saveRecord() {
     } else {
         const guessType = prestationType.toLowerCase().includes('bilan') ? 'bilans' : 
                          prestationType.toLowerCase().includes('animation') ? 'animations' : 'formations';
-        const newId = Math.max(...data[guessType].map(r => r.id), 0) + 1;
+        const newId = Date.now();
         data[guessType].push({
             id: newId,
             clientName: name,
@@ -1005,6 +1005,9 @@ function saveRecord() {
 function deleteRecord(type, id) {
     if (confirm('Supprimer ?')) {
         data[type] = data[type].filter(r => r.id !== id);
+        if (data.listeStagiaires) {
+            data.listeStagiaires = data.listeStagiaires.filter(p => p.clientId !== id);
+        }
         renderTable(type);
         saveData();
         renderDashboard();
