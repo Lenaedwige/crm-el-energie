@@ -378,14 +378,20 @@
 
 <!-- MODAL PARTICIPANTS TABLE - 12 LIGNES -->
 <div id="listeStagiairesTableModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
-    <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; margin: 20px auto;">
+    <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; width: 96%; max-width: 1400px; margin: 20px auto;">
         <h2>Participants (Maximum 12)</h2>
         
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
             <thead>
                 <tr style="background: #0F4761; color: white;">
-                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Nom Complet</th>
-                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Email</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Nom</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Prénom</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Email</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Poste occupé</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Formation initiale</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Besoins/attentes</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Porteur handicap</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Aménagement</th>
                 </tr>
             </thead>
             <tbody id="listeStagiairesTableBody">
@@ -576,7 +582,8 @@ function generateDoc(type, clientId, docName) {
         email2: record.email2 || '',
         telephone2: record.telephone2 || '',
         quantiteParticipants: record.quantiteParticipants || '',
-        listeStagiaires: getParticipantsOnly(clientId)
+        listeStagiaires: getParticipantsOnly(clientId),
+        participants: (data.listeStagiaires || []).filter(p => p.clientId === clientId)
     };
 
     fetch(scriptUrl, {
@@ -806,10 +813,17 @@ function showListeStagiairesTableModal(clientId) {
     // Générer 12 lignes
     let html = '';
     for (let i = 0; i < 12; i++) {
-        const existing = existingParticipants[i] || { name: '', email: '' };
+        const existing = existingParticipants[i] || { name: '', prenom: '', email: '', poste: '', formationInitiale: '', besoins: '', handicap: '', amenagement: '' };
+        const st = 'width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;';
         html += `<tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_name_${i}" value="${existing.name}" autocomplete="new-password" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 3px;"></td>
-            <td style="padding: 8px; border: 1px solid #ddd;"><input type="email" id="listeStagiaire_email_${i}" value="${existing.email}" autocomplete="new-password" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 3px;"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_name_${i}" value="${existing.name || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_prenom_${i}" value="${existing.prenom || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="email" id="listeStagiaire_email_${i}" value="${existing.email || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_poste_${i}" value="${existing.poste || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_formationInitiale_${i}" value="${existing.formationInitiale || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_besoins_${i}" value="${existing.besoins || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_handicap_${i}" value="${existing.handicap || ''}" autocomplete="new-password" style="${st}"></td>
+            <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_amenagement_${i}" value="${existing.amenagement || ''}" autocomplete="new-password" style="${st}"></td>
         </tr>`;
     }
     
@@ -832,15 +846,21 @@ function saveAllParticipants() {
     
     // Ajouter les nouveaux participants
     for (let i = 0; i < 12; i++) {
-        const name = document.getElementById(`listeStagiaire_name_${i}`).value.trim();
-        const email = document.getElementById(`listeStagiaire_email_${i}`).value.trim();
+        const g = (c) => document.getElementById(`listeStagiaire_${c}_${i}`).value.trim();
+        const name = g('name');
         
-        if (name && email) {
+        if (name) {
             data.listeStagiaires.push({
                 id: 'listeStagiaire_' + currentListeStagiairesClientId + '_' + i,
                 clientId: currentListeStagiairesClientId,
                 name: name,
-                email: email
+                prenom: g('prenom'),
+                email: g('email'),
+                poste: g('poste'),
+                formationInitiale: g('formationInitiale'),
+                besoins: g('besoins'),
+                handicap: g('handicap'),
+                amenagement: g('amenagement')
             });
         }
     }
@@ -857,14 +877,21 @@ function saveAndGenerateAllDocs() {
     }
     data.listeStagiaires = data.listeStagiaires.filter(p => p.clientId !== currentListeStagiairesClientId);
     for (let i = 0; i < 12; i++) {
-        const name = document.getElementById(`listeStagiaire_name_${i}`).value.trim();
-        const email = document.getElementById(`listeStagiaire_email_${i}`).value.trim();
-        if (name && email) {
+        const g = (c) => document.getElementById(`listeStagiaire_${c}_${i}`).value.trim();
+        const name = g('name');
+        
+        if (name) {
             data.listeStagiaires.push({
                 id: 'listeStagiaire_' + currentListeStagiairesClientId + '_' + i,
                 clientId: currentListeStagiairesClientId,
                 name: name,
-                email: email
+                prenom: g('prenom'),
+                email: g('email'),
+                poste: g('poste'),
+                formationInitiale: g('formationInitiale'),
+                besoins: g('besoins'),
+                handicap: g('handicap'),
+                amenagement: g('amenagement')
             });
         }
     }
