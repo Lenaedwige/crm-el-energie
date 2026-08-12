@@ -495,10 +495,10 @@ function renderDashboard() {
     let animations = data.animations.filter(a => a.utilisateur === currentUser);
     let seminaires = data.seminaires.filter(s => s.utilisateur === currentUser);
     
-    let totalBilans = bilans.reduce((sum, b) => sum + b.montantTTC, 0);
-    let totalFormations = formations.reduce((sum, f) => sum + f.montantTTC, 0);
-    let totalAnimations = animations.reduce((sum, a) => sum + a.montantTTC, 0);
-    let totalSeminaires = seminaires.reduce((sum, s) => sum + s.montantTTC, 0);
+    let totalBilans = bilans.reduce((sum, b) => sum + (Number(b.montantTTC) || 0), 0);
+    let totalFormations = formations.reduce((sum, f) => sum + (Number(f.montantTTC) || 0), 0);
+    let totalAnimations = animations.reduce((sum, a) => sum + (Number(a.montantTTC) || 0), 0);
+    let totalSeminaires = seminaires.reduce((sum, s) => sum + (Number(s.montantTTC) || 0), 0);
     
     document.getElementById('dashboardContent').innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
