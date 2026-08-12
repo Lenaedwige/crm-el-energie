@@ -561,7 +561,7 @@ function generateDoc(type, clientId, docName) {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbyUtvKoltCQY9h7JzzdXLfQnf_7BenohWaw6U9QzyaymqwPId49M_UP147GSL2EgcJBlg/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzbydTurDu24817D31TSJdBqmQZO87VBUL-88MZzq78DjpQ-Xc-hNewLTlLzVpPKlXGJw/exec";
 
     const clientData = {
         clientName: record.clientName,
@@ -724,6 +724,7 @@ function renderTable(type) {
         
         html += '<td>';
         html += '<button class="btn-edit" onclick="editRecord(\'' + type + '\', ' + r.id + ')">✎</button> ';
+        html += '<button class="btn-edit" onclick="duplicateRecord(\'' + type + '\', ' + r.id + ')" title="Nouvelle prestation pour ce client" style="background: #9C27B0;">⧉</button> ';
         html += '<button class="btn-delete" onclick="deleteRecord(\'' + type + '\', ' + r.id + ')">✕</button>';
         html += '</td></tr>';
     });
@@ -1002,6 +1003,25 @@ function saveRecord() {
     renderDashboard();
 }
 
+function duplicateRecord(type, id) {
+    const src = data[type].find(r => r.id === id);
+    if (!src) return;
+    const copie = JSON.parse(JSON.stringify(src));
+    copie.id = Date.now();
+    copie.prestationType = '';
+    copie.dateDebut = '';
+    copie.dateFin = '';
+    copie.montantHT = '';
+    copie.montantTTC = '';
+    copie.statut = 'Prospect';
+    copie.documents = {};
+    copie.notes = '';
+    data[type].push(copie);
+    saveData();
+    renderTable(type);
+    editRecord(type, copie.id);
+}
+
 function deleteRecord(type, id) {
     if (confirm('Supprimer ?')) {
         data[type] = data[type].filter(r => r.id !== id);
@@ -1142,7 +1162,7 @@ function generateFicheClient() {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbyUtvKoltCQY9h7JzzdXLfQnf_7BenohWaw6U9QzyaymqwPId49M_UP147GSL2EgcJBlg/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzbydTurDu24817D31TSJdBqmQZO87VBUL-88MZzq78DjpQ-Xc-hNewLTlLzVpPKlXGJw/exec";
 
     const clientData = {
         clientName: record.clientName,
@@ -1227,7 +1247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUtvKoltCQY9h7JzzdXLfQnf_7BenohWaw6U9QzyaymqwPId49M_UP147GSL2EgcJBlg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbydTurDu24817D31TSJdBqmQZO87VBUL-88MZzq78DjpQ-Xc-hNewLTlLzVpPKlXGJw/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
