@@ -633,6 +633,8 @@ function cycleDocStatus(type, clientId, docName) {
     renderTable(type);
 }
 
+var collapsedGroups = {};
+
 function renderTable(type) {
     const records = data[type];
     const container = document.getElementById(type + 'Table');
@@ -662,7 +664,32 @@ function renderTable(type) {
     
     html += '<th>Actions</th></tr>';
     
-    userRecords.forEach(r => {
+    // --- Regroupement par entreprise (formations uniquement) ---
+    let listeAffichee = userRecords;
+    if (type === 'formations') {
+        const groupes = {};
+        userRecords.forEach(r => {
+            const cle = (r.entreprise || '\u2014').trim();
+            if (!groupes[cle]) groupes[cle] = [];
+            groupes[cle].push(r);
+        });
+        const nbCols = 8 + docs.length + 1;
+        listeAffichee = [];
+        Object.keys(groupes).sort().forEach(cle => {
+            const lignes = groupes[cle];
+            const idGroupe = 'grp_' + cle.replace(/[^A-Za-z0-9]/g, '_');
+            const ouvert = collapsedGroups[idGroupe] !== true;
+            const total = lignes.reduce((acc, x) => acc + (Number(x.montantTTC) || 0), 0);
+            html += '<tr class="groupe-entreprise" onclick="toggleGroupe(\'' + idGroupe + '\')" style="cursor: pointer; background: #0F4761; color: white;">';
+            html += '<td colspan="' + nbCols + '" style="padding: 10px; font-weight: 700;">';
+            html += (ouvert ? '\u25bc ' : '\u25b6 ') + cle;
+            html += ' <span style="font-weight: 400; opacity: 0.85;">\u2014 ' + lignes.length + ' prestation' + (lignes.length > 1 ? 's' : '') + ' \u2014 ' + total + '\u20ac TTC</span>';
+            html += '</td></tr>';
+            if (ouvert) lignes.forEach(r => { r.__grp = idGroupe; listeAffichee.push(r); });
+        });
+    }
+
+    listeAffichee.forEach(r => {
         html += '<tr>';
         
         if (type === 'formations') {
@@ -1001,6 +1028,11 @@ function saveRecord() {
     saveData();
     closeModal();
     renderDashboard();
+}
+
+function toggleGroupe(idGroupe) {
+    collapsedGroups[idGroupe] = !collapsedGroups[idGroupe];
+    renderTable('formations');
 }
 
 function duplicateRecord(type, id) {
