@@ -434,6 +434,19 @@ const getDocStatusColor = (status) => {
     return '#ccc';
 };
 
+const formatrices = {
+    'Edwige': {
+        nom: 'Léna Edwige',
+        telephone: '0681032047',
+        email: 'el.energie@orange.fr'
+    },
+    'Florence': {
+        nom: 'Florence Benoliel',
+        telephone: '0663735521',
+        email: 'fgabalda@gmail.com'
+    }
+};
+
 let data = {
     bilans: [
         {id:1, clientName:'Clémence Bach', email:'', telephone:'', contact2:'', email2:'', telephone2:'', entreprise:'', prestationType:'Premium', montantTTC:1920, statut:'En cours', notes:'', type:'bilan', documents:{}, utilisateur:'Edwige'},
@@ -571,9 +584,10 @@ function generateDoc(type, clientId, docName) {
 
     const scriptUrl = "https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec";
 
+    const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
         clientName: record.clientName,
-        formatateur: currentUser,
+        formatateur: infosFormatrice.nom || currentUser,
         email: record.email,
         telephone: record.telephone,
         SIRET: record.SIRET || '',
@@ -587,6 +601,8 @@ function generateDoc(type, clientId, docName) {
         dateDebut: record.dateDebut || '',
         dateFin: record.dateFin || '',
         contact2: record.contact2 || '',
+        telephoneFormatrice: infosFormatrice.telephone || '',
+        emailFormatrice: infosFormatrice.email || '',
         email2: record.email2 || '',
         telephone2: record.telephone2 || '',
         quantiteParticipants: record.quantiteParticipants || '',
@@ -1218,9 +1234,10 @@ function generateFicheClient() {
 
     const scriptUrl = "https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec";
 
+    const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
         clientName: record.clientName,
-        formatateur: currentUser,
+        formatateur: infosFormatrice.nom || currentUser,
         email: record.email,
         telephone: record.telephone,
         SIRET: record.SIRET || '',
@@ -1234,6 +1251,8 @@ function generateFicheClient() {
         dateDebut: record.dateDebut || '',
         dateFin: record.dateFin || '',
         contact2: record.contact2 || '',
+        telephoneFormatrice: infosFormatrice.telephone || '',
+        emailFormatrice: infosFormatrice.email || '',
         email2: record.email2 || '',
         telephone2: record.telephone2 || '',
         quantiteParticipants: record.quantiteParticipants || '',
