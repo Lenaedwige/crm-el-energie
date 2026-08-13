@@ -229,7 +229,13 @@ function loadData() {
     try {
         const saved = localStorage.getItem('el-energie-crm-data-v2');
         if (saved) {
-            data = JSON.parse(saved);
+            const loaded = JSON.parse(saved);
+            // Fusionner avec les données existantes (ne pas perdre les données par défaut)
+            if (loaded.bilans && loaded.bilans.length > 0) data.bilans = loaded.bilans;
+            if (loaded.formations && loaded.formations.length > 0) data.formations = loaded.formations;
+            if (loaded.animations && loaded.animations.length > 0) data.animations = loaded.animations;
+            if (loaded.seminaires && loaded.seminaires.length > 0) data.seminaires = loaded.seminaires;
+            if (loaded.listeStagiaires && loaded.listeStagiaires.length > 0) data.listeStagiaires = loaded.listeStagiaires;
             console.log('✓ Données chargées depuis localStorage');
         }
     } catch (e) {
