@@ -564,8 +564,61 @@ async function loadData() {
     }
 }
 
+async function migrateLocalStorageToSupabase() {
+    try {
+        const saved = localStorage.getItem('el-energie-crm-data-v2');
+        if (!saved) return; // Pas de données à migrer
+
+        const oldData = JSON.parse(saved);
+        console.log('📦 Migrating localStorage data to Supabase...');
+
+        // Migrer bilans
+        if (oldData.bilans && oldData.bilans.length > 0) {
+            for (const record of oldData.bilans) {
+                await supabaseClient.from('bilans').upsert(record, { onConflict: 'id' });
+            }
+        }
+
+        // Migrer formations
+        if (oldData.formations && oldData.formations.length > 0) {
+            for (const record of oldData.formations) {
+                await supabaseClient.from('formations').upsert(record, { onConflict: 'id' });
+            }
+        }
+
+        // Migrer animations
+        if (oldData.animations && oldData.animations.length > 0) {
+            for (const record of oldData.animations) {
+                await supabaseClient.from('animations').upsert(record, { onConflict: 'id' });
+            }
+        }
+
+        // Migrer séminaires
+        if (oldData.seminaires && oldData.seminaires.length > 0) {
+            for (const record of oldData.seminaires) {
+                await supabaseClient.from('seminaires').upsert(record, { onConflict: 'id' });
+            }
+        }
+
+        // Migrer listeStagiaires
+        if (oldData.listeStagiaires && oldData.listeStagiaires.length > 0) {
+            for (const record of oldData.listeStagiaires) {
+                await supabaseClient.from('listeStagiaires').upsert(record, { onConflict: 'id' });
+            }
+        }
+
+        console.log('✓ Migration complète');
+    } catch (e) {
+        console.warn('Migration error:', e);
+    }
+}
+
 async function loadDataFromSupabase() {
     try {
+        // D'abord, migrer les anciennes données si elles existent
+        await migrateLocalStorageToSupabase();
+
+        // Ensuite, charger depuis Supabase
         await loadData();
     } catch (err) {
         console.warn('⚠️ Sync Supabase échouée:', err);
