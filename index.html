@@ -481,12 +481,20 @@ function applyUserColors() {
 }
 
 function saveData() {
-    localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
+    try {
+        localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
+    } catch (e) {
+        console.warn('localStorage indisponible (Safari mode privé?):', e);
+    }
 }
 
 function loadData() {
-    const saved = localStorage.getItem('el-energie-crm-data-v2');
-    if (saved) data = JSON.parse(saved);
+    try {
+        const saved = localStorage.getItem('el-energie-crm-data-v2');
+        if (saved) data = JSON.parse(saved);
+    } catch (e) {
+        console.warn('Impossible de charger les données:', e);
+    }
 }
 
 function renderDashboard() {
@@ -1247,8 +1255,26 @@ function generateFicheClient() {
     });
 }
 
+// Test localStorage availability
+function testLocalStorageAvailable() {
+    try {
+        const test = '__test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 // Init
 document.addEventListener('DOMContentLoaded', () => {
+    if (!testLocalStorageAvailable()) {
+        const warning = document.createElement('div');
+        warning.style.cssText = 'background:#ff6b6b;color:white;padding:15px;margin-bottom:10px;border-radius:4px;text-align:center;font-weight:bold;';
+        warning.textContent = '⚠️ Safari bloque le stockage. Désactivez le mode privé ou autorisez les cookies pour ce site.';
+        document.querySelector('.content')?.insertBefore(warning, document.querySelector('.content').firstChild);
+    }
     loadData();
     applyUserColors();
     renderDashboard();
