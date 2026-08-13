@@ -1097,7 +1097,9 @@ function importData(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
-            const imported = JSON.parse(e.target.result);
+            const content = e.target.result;
+            console.log('Fichier reçu (100 premiers caractères):', content.substring(0, 100));
+            const imported = JSON.parse(content);
             data = imported;
             saveData();
             alert('✓ Données importées');
@@ -1108,6 +1110,7 @@ function importData(event) {
             renderTable('seminaires');
         } catch (err) {
             console.error('Import error:', err);
+            console.log('Contenu complet reçu:', e.target.result);
             alert('Erreur : fichier JSON invalide - ' + err.message);
         }
     };
