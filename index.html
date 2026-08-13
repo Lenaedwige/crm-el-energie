@@ -76,6 +76,7 @@
         .statut-paye { background: #f3e5f5; color: #6a1b9a; }
         .statut-termine { background: #e0f2f1; color: #00695c; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -406,6 +407,11 @@
 </div>
 
 <script>
+// ===== SUPABASE INITIALIZATION =====
+const SUPABASE_URL = 'https://eyxycdpeprmmzunsmskp.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_0S1on9ZfI4pEp4IBFhkrNw_Xt-hL9y6';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let currentUser = 'Edwige';
 let editingRecord = null;
 let editingType = null;
@@ -493,70 +499,116 @@ function applyUserColors() {
     }
 }
 
-function saveData() {
+async function saveData() {
     try {
-        localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
+        // Sauvegarder bilans
+        for (const record of data.bilans) {
+            const { error } = await supabaseClient
+                .from('bilans')
+                .upsert({ ...record }, { onConflict: 'id' });
+            if (error) console.warn('Erreur sauvegarde bilan:', error);
+        }
+        // Sauvegarder formations
+        for (const record of data.formations) {
+            const { error } = await supabaseClient
+                .from('formations')
+                .upsert({ ...record }, { onConflict: 'id' });
+            if (error) console.warn('Erreur sauvegarde formation:', error);
+        }
+        // Sauvegarder animations
+        for (const record of data.animations) {
+            const { error } = await supabase
+                .from('animations')
+                .upsert({ ...record }, { onConflict: 'id' });
+            if (error) console.warn('Erreur sauvegarde animation:', error);
+        }
+        // Sauvegarder séminaires
+        for (const record of data.seminaires) {
+            const { error } = await supabase
+                .from('seminaires')
+                .upsert({ ...record }, { onConflict: 'id' });
+            if (error) console.warn('Erreur sauvegarde séminaire:', error);
+        }
+        // Sauvegarder listeStagiaires
+        if (data.listeStagiaires && data.listeStagiaires.length > 0) {
+            for (const record of data.listeStagiaires) {
+                const { error } = await supabase
+                    .from('listeStagiaires')
+                    .upsert({ ...record }, { onConflict: 'id' });
+                if (error) console.warn('Erreur sauvegarde participant:', error);
+            }
+        }
+        console.log('✓ Données synchronisées avec Supabase');
     } catch (e) {
-        console.warn('localStorage indisponible (Safari mode privé?):', e);
+        console.warn('Erreur Supabase:', e);
     }
-    // Sync avec Google Sheets
-    syncDataToSheet();
 }
 
-function loadData() {
+async function loadData() {
     try {
-        const saved = localStorage.getItem('el-energie-crm-data-v2');
-        if (saved) data = JSON.parse(saved);
+        const { data: bilans } = await supabaseClient.from('bilans').select('*');
+        const { data: formations } = await supabaseClient.from('formations').select('*');
+        const { data: animations } = await supabaseClient.from('animations').select('*');
+        const { data: seminaires } = await supabaseClient.from('seminaires').select('*');
+        const { data: listeStagiaires } = await supabaseClient.from('listeStagiaires').select('*');
+
+        data.bilans = bilans || [];
+        data.formations = formations || [];
+        data.animations = animations || [];
+        data.seminaires = seminaires || [];
+        data.listeStagiaires = listeStagiaires || [];
+
+        console.log('✓ Données chargées depuis Supabase');
     } catch (e) {
         console.warn('Impossible de charger les données:', e);
     }
 }
 
-function loadDataFromSheet() {
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec?operation=readData";
-
-    fetch(scriptUrl, { method: 'GET' })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success && result.data) {
-            data = result.data;
-            try {
-                localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
-            } catch (e) {
-                console.warn('localStorage indisponible');
-            }
-            console.log('✓ Données chargées depuis Google Sheets');
-        }
-    })
-    .catch(err => {
-        console.warn('⚠️ Sync Sheets échouée, utilisant localStorage:', err);
-    })
-    .finally(() => {
+async function loadDataFromSupabase() {
+    try {
+        await loadData();
+    } catch (err) {
+        console.warn('⚠️ Sync Supabase échouée:', err);
+    } finally {
         // Toujours afficher les tables même si la sync échoue
         renderDashboard();
         renderTable('bilans');
         renderTable('formations');
         renderTable('animations');
         renderTable('seminaires');
-    });
+    }
 }
 
-function syncDataToSheet() {
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec";
+// Real-time subscription for automatic sync
+function subscribeToRealtimeUpdates() {
+    // Subscribe to bilans changes
+    supabaseClient.channel('bilans-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'bilans' }, () => {
+            loadData();
+            renderDashboard();
+            renderTable('bilans');
+        })
+        .subscribe();
 
-    fetch(scriptUrl, {
-        method: 'POST',
-        body: JSON.stringify({ operation: 'writeData', data: data })
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            console.log('✓ Données synchronisées vers Google Sheets');
-        }
-    })
-    .catch(err => {
-        console.warn('⚠️ Sync Sheets échouée:', err);
-    });
+    // Subscribe to formations changes
+    supabaseClient.channel('formations-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'formations' }, () => {
+            loadData();
+            renderDashboard();
+            renderTable('formations');
+        })
+        .subscribe();
+
+    // Subscribe to animations changes
+    supabaseClient.channel('animations-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'animations' }, () => {
+            loadData();
+            renderDashboard();
+            renderTable('animations');
+        })
+        .subscribe();
+
+    console.log('✓ Real-time subscriptions actives');
 }
 
 function renderDashboard() {
@@ -631,7 +683,7 @@ function generateDoc(type, clientId, docName) {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwdcOpRwl_AK_TPhjXAQWpLD2myRV2l8E_k0ldL8bdnYlu0560Bt_YghdLRuPT6FBtw3g/exec";
 
     const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
@@ -1281,7 +1333,7 @@ function generateFicheClient() {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwdcOpRwl_AK_TPhjXAQWpLD2myRV2l8E_k0ldL8bdnYlu0560Bt_YghdLRuPT6FBtw3g/exec";
 
     const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
@@ -1350,20 +1402,9 @@ function testLocalStorageAvailable() {
 
 // Init
 document.addEventListener('DOMContentLoaded', () => {
-    if (!testLocalStorageAvailable()) {
-        const warning = document.createElement('div');
-        warning.style.cssText = 'background:#ff6b6b;color:white;padding:15px;margin-bottom:10px;border-radius:4px;text-align:center;font-weight:bold;';
-        warning.textContent = '⚠️ Safari bloque le stockage. Désactivez le mode privé ou autorisez les cookies pour ce site.';
-        document.querySelector('.content')?.insertBefore(warning, document.querySelector('.content').firstChild);
-    }
-    loadData();
-    loadDataFromSheet(); // Charger depuis Google Sheets (sync)
+    loadDataFromSupabase(); // Charger depuis Supabase
+    subscribeToRealtimeUpdates(); // Activer la synchronisation en temps réel
     applyUserColors();
-    renderDashboard();
-    renderTable('bilans');
-    renderTable('formations');
-    renderTable('animations');
-    renderTable('seminaires');
 
     // Listener pour afficher/masquer champs extras
     document.getElementById('editPrestationType').addEventListener('change', toggleExtraFields);
@@ -1388,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdcOpRwl_AK_TPhjXAQWpLD2myRV2l8E_k0ldL8bdnYlu0560Bt_YghdLRuPT6FBtw3g/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
