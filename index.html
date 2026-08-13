@@ -503,28 +503,28 @@ async function saveData() {
     try {
         // Sauvegarder bilans
         for (const record of data.bilans) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('bilans')
                 .upsert({ ...record }, { onConflict: 'id' });
             if (error) console.warn('Erreur sauvegarde bilan:', error);
         }
         // Sauvegarder formations
         for (const record of data.formations) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('formations')
                 .upsert({ ...record }, { onConflict: 'id' });
             if (error) console.warn('Erreur sauvegarde formation:', error);
         }
         // Sauvegarder animations
         for (const record of data.animations) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('animations')
                 .upsert({ ...record }, { onConflict: 'id' });
             if (error) console.warn('Erreur sauvegarde animation:', error);
         }
         // Sauvegarder séminaires
         for (const record of data.seminaires) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('seminaires')
                 .upsert({ ...record }, { onConflict: 'id' });
             if (error) console.warn('Erreur sauvegarde séminaire:', error);
@@ -532,7 +532,7 @@ async function saveData() {
         // Sauvegarder listeStagiaires
         if (data.listeStagiaires && data.listeStagiaires.length > 0) {
             for (const record of data.listeStagiaires) {
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('listeStagiaires')
                     .upsert({ ...record }, { onConflict: 'id' });
                 if (error) console.warn('Erreur sauvegarde participant:', error);
@@ -552,13 +552,13 @@ async function loadData() {
         const { data: seminaires } = await supabaseClient.from('seminaires').select('*');
         const { data: listeStagiaires } = await supabaseClient.from('listeStagiaires').select('*');
 
-        data.bilans = bilans || [];
-        data.formations = formations || [];
-        data.animations = animations || [];
-        data.seminaires = seminaires || [];
-        data.listeStagiaires = listeStagiaires || [];
+        if (bilans && bilans.length > 0) data.bilans = bilans;
+        if (formations && formations.length > 0) data.formations = formations;
+        if (animations && animations.length > 0) data.animations = animations;
+        if (seminaires && seminaires.length > 0) data.seminaires = seminaires;
+        if (listeStagiaires && listeStagiaires.length > 0) data.listeStagiaires = listeStagiaires;
 
-        console.log('✓ Données chargées depuis Supabase');
+        console.log('✓ Données chargées depuis Supabase (merge mode)');
     } catch (e) {
         console.warn('Impossible de charger les données:', e);
     }
@@ -612,10 +612,10 @@ function subscribeToRealtimeUpdates() {
 }
 
 function renderDashboard() {
-    let bilans = data.bilans.filter(b => b.utilisateur === currentUser);
-    let formations = data.formations.filter(f => f.utilisateur === currentUser);
-    let animations = data.animations.filter(a => a.utilisateur === currentUser);
-    let seminaires = data.seminaires.filter(s => s.utilisateur === currentUser);
+    let bilans = (data.bilans || []).filter(b => b.utilisateur === currentUser);
+    let formations = (data.formations || []).filter(f => f.utilisateur === currentUser);
+    let animations = (data.animations || []).filter(a => a.utilisateur === currentUser);
+    let seminaires = (data.seminaires || []).filter(s => s.utilisateur === currentUser);
 
     let totalBilans = bilans.reduce((sum, b) => sum + (Number(b.montantTTC) || 0), 0);
     let totalFormations = formations.reduce((sum, f) => sum + (Number(f.montantTTC) || 0), 0);
@@ -761,11 +761,11 @@ function cycleDocStatus(type, clientId, docName) {
 var collapsedGroups = {};
 
 function renderTable(type) {
-    const records = data[type];
+    const records = data[type] || [];
     const container = document.getElementById(type + 'Table');
     const docs = getDocuments(type);
 
-    const userRecords = records.filter(r => !r.utilisateur || r.utilisateur === currentUser);
+    const userRecords = (records || []).filter(r => !r.utilisateur || r.utilisateur === currentUser);
 
     if (!userRecords.length) {
         container.innerHTML = '<p>Aucune donnée</p>';
@@ -1402,9 +1402,17 @@ function testLocalStorageAvailable() {
 
 // Init
 document.addEventListener('DOMContentLoaded', () => {
+    // Afficher d'abord les données par défaut
+    applyUserColors();
+    renderDashboard();
+    renderTable('bilans');
+    renderTable('formations');
+    renderTable('animations');
+    renderTable('seminaires');
+
+    // Puis charger Supabase en arrière-plan
     loadDataFromSupabase(); // Charger depuis Supabase
     subscribeToRealtimeUpdates(); // Activer la synchronisation en temps réel
-    applyUserColors();
 
     // Listener pour afficher/masquer champs extras
     document.getElementById('editPrestationType').addEventListener('change', toggleExtraFields);
