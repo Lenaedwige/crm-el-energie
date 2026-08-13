@@ -683,7 +683,7 @@ function generateDoc(type, clientId, docName) {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbwdcOpRwl_AK_TPhjXAQWpLD2myRV2l8E_k0ldL8bdnYlu0560Bt_YghdLRuPT6FBtw3g/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycby408J5bl63iao1gV2qpjf0p13FRvewicencRsIX2lKzynKc_2aXDW6zjKHEVugVI650Q/exec";
 
     const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
@@ -715,19 +715,30 @@ function generateDoc(type, clientId, docName) {
         method: 'POST',
         body: JSON.stringify({ clientData, docName, templateId })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('📡 Réponse brute du script:', response.status, response.statusText);
+        return response.text().then(text => {
+            console.log('📝 Contenu:', text);
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('❌ JSON invalide:', text);
+                throw new Error('Réponse non-JSON: ' + text);
+            }
+        });
+    })
     .then(data => {
         if (data.success) {
             console.log('✓ Doc générée:', data.fileUrl);
             alert(`✓ ${docName} généré!`);
         } else {
-            console.error('❌ Erreur:', data.error);
-            alert(`❌ Erreur: ${data.error}`);
+            console.error('❌ Erreur script:', data);
+            alert(`❌ Erreur: ${data.error || 'Pas de message (voir console)'}`);
         }
     })
     .catch(err => {
-        console.warn('⚠️ Réponse script non reçue mais doc créée:', err);
-        alert(`✓ ${docName} généré! (notification retardée)`);
+        console.warn('⚠️ Erreur:', err);
+        alert(`❌ Erreur: ${err.message}`);
     });
 }
 
@@ -1333,7 +1344,7 @@ function generateFicheClient() {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbwdcOpRwl_AK_TPhjXAQWpLD2myRV2l8E_k0ldL8bdnYlu0560Bt_YghdLRuPT6FBtw3g/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycby408J5bl63iao1gV2qpjf0p13FRvewicencRsIX2lKzynKc_2aXDW6zjKHEVugVI650Q/exec";
 
     const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
@@ -1437,7 +1448,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdcOpRwl_AK_TPhjXAQWpLD2myRV2l8E_k0ldL8bdnYlu0560Bt_YghdLRuPT6FBtw3g/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby408J5bl63iao1gV2qpjf0p13FRvewicencRsIX2lKzynKc_2aXDW6zjKHEVugVI650Q/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
