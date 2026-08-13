@@ -1103,11 +1103,21 @@ function importData(event) {
             alert('✓ Données importées');
             renderDashboard();
             renderTable('bilans');
+            renderTable('formations');
+            renderTable('animations');
+            renderTable('seminaires');
         } catch (err) {
-            alert('Erreur : fichier JSON invalide');
+            console.error('Import error:', err);
+            alert('Erreur : fichier JSON invalide - ' + err.message);
         }
     };
+    reader.onerror = function() {
+        alert('Erreur : impossible de lire le fichier');
+    };
     reader.readAsText(file);
+
+    // Réinitialiser l'input pour permettre la réimportation du même fichier
+    event.target.value = '';
 }
 
 // FICHE CLIENT FUNCTIONS
