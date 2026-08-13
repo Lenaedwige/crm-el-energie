@@ -526,15 +526,18 @@ function loadDataFromSheet() {
                 console.warn('localStorage indisponible');
             }
             console.log('✓ Données chargées depuis Google Sheets');
-            renderDashboard();
-            renderTable('bilans');
-            renderTable('formations');
-            renderTable('animations');
-            renderTable('seminaires');
         }
     })
     .catch(err => {
         console.warn('⚠️ Sync Sheets échouée, utilisant localStorage:', err);
+    })
+    .finally(() => {
+        // Toujours afficher les tables même si la sync échoue
+        renderDashboard();
+        renderTable('bilans');
+        renderTable('formations');
+        renderTable('animations');
+        renderTable('seminaires');
     });
 }
 
