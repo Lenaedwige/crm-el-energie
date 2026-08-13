@@ -22,17 +22,17 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Helvetica, Arial; background: #f5f5f5; }
-        
+
         :root {
             --color-primary: #0F4761;
             --color-accent: #F37322;
         }
-        
+
         body.florence-mode {
             --color-primary: #8b5a8e;
             --color-accent: #d4a5d4;
         }
-        
+
         .container { display: flex; height: 100vh; }
         .sidebar { width: 250px; background: var(--color-primary); color: white; padding: 20px; overflow-y: auto; }
         .sidebar h1 { font-size: 16px; margin-bottom: 30px; }
@@ -125,124 +125,124 @@
                 <div class="modal-content">
                     <!-- Faux input pour capturer password manager -->
                     <input type="password" style="display: none;">
-                    
+
                     <h2>Fiche Client</h2>
-                    
+
                     <div class="form-group">
                         <label>Nom Client</label>
                         <input type="text" id="fcClientName" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Entreprise</label>
                         <input type="text" id="fcEntreprise" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>SIRET</label>
                         <input type="text" id="fcSIRET" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Numéro TVA</label>
                         <input type="text" id="fcNumeroTVA" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Adresse Postale</label>
                         <input type="text" id="fcAdressePostale" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Type Prestation</label>
                         <input type="text" id="fcPrestationType" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>OPCO</label>
                         <input type="text" id="fcOPCO" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Montant HT (€)</label>
                         <input type="number" id="fcMontantHT" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Montant TTC (€)</label>
                         <input type="number" id="fcMontantTTC" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Date Début</label>
                         <input type="text" id="fcDateDebut" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Date Fin</label>
                         <input type="text" id="fcDateFin" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Statut</label>
                         <input type="text" id="fcStatut" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Quantité Participants</label>
                         <input type="number" id="fcQuantiteParticipants" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Notes</label>
                         <input type="text" id="fcNotes" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Contact Principal</label>
                         <input type="text" id="fcContact1" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Email Principal</label>
                         <input type="text" id="fcEmail1" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Téléphone Principal</label>
                         <input type="text" id="fcTelephone1" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Contact Secondaire</label>
                         <input type="text" id="fcContact2" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Email Secondaire</label>
                         <input type="text" id="fcEmail2" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Téléphone Secondaire</label>
                         <input type="text" id="fcTelephone2" autocomplete="new-password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label style="color: var(--color-accent); font-weight: bold;">Formateur</label>
                         <input type="text" id="fcFormateur" readonly style="background: #f5f5f5;">
                     </div>
-                    
+
                     <div class="form-group">
                         <label style="color: var(--color-accent); font-weight: bold;">Email Formateur</label>
                         <input type="text" id="fcEmailFormateur" readonly style="background: #f5f5f5;">
                     </div>
-                    
+
                     <div class="form-group">
                         <label style="color: var(--color-accent); font-weight: bold;">Téléphone Formateur</label>
                         <input type="text" id="fcTelephoneFormateur" readonly style="background: #f5f5f5;">
                     </div>
-                    
+
                     <div class="modal-footer">
                         <button class="button-cancel" onclick="closeFicheClientModal()">Fermer</button>
                         <button class="button-save" onclick="generateFicheClient()">✓ Enregistrer</button>
@@ -267,27 +267,27 @@
 <div id="editModal" class="modal">
     <div class="modal-content">
         <h2 id="modalTitle">Ajouter Client</h2>
-        
+
         <div class="form-group">
             <label>Nom Client</label>
             <input type="text" id="editClientName">
         </div>
-        
+
         <div class="form-group">
             <label>SIRET</label>
             <input type="text" id="editSIRET">
         </div>
-        
+
         <div class="form-group">
             <label>Numéro de TVA Intracommunautaire</label>
             <input type="text" id="editNumeroTVA" placeholder="FR12345678901">
         </div>
-        
+
         <div class="form-group">
             <label>Email</label>
             <input type="email" id="editEmail">
         </div>
-        
+
         <div class="form-group">
             <label>Téléphone</label>
             <input type="text" id="editTelephone">
@@ -297,47 +297,47 @@
             <label>Entreprise</label>
             <input type="text" id="editEntreprise">
         </div>
-        
+
         <div class="form-group" id="adresseGroup">
             <label>Adresse Postale</label>
             <input type="text" id="editAdressePostale">
         </div>
-        
+
         <div class="form-group">
             <label>Type Prestation</label>
             <input type="text" id="editPrestationType">
         </div>
-        
+
         <div class="form-group" id="opcoGroup">
             <label>OPCO</label>
             <input type="text" id="editOPCO">
         </div>
-        
+
         <div class="form-group">
             <label>Montant TTC (€)</label>
             <input type="number" id="editMontantTTC">
         </div>
-        
+
         <div class="form-group">
             <label>Montant HT (€)</label>
             <input type="number" id="editMontantHT" step="0.01">
         </div>
-        
+
         <div class="form-group">
             <label>Quantité de participants</label>
             <input type="number" id="editQuantiteParticipants">
         </div>
-        
+
         <div class="form-group">
             <label>Date Début (JJ/MM/YYYY)</label>
             <input type="text" id="editDateDebut" placeholder="01/01/2026">
         </div>
-        
+
         <div class="form-group">
             <label>Date Fin (JJ/MM/YYYY)</label>
             <input type="text" id="editDateFin" placeholder="05/01/2026">
         </div>
-        
+
         <div class="form-group">
             <label>Statut</label>
             <select id="editStatut">
@@ -363,12 +363,12 @@
             <label>Téléphone 2</label>
             <input type="text" id="editTelephone2">
         </div>
-        
+
         <div class="form-group">
             <label>Notes</label>
             <textarea id="editNotes" rows="3"></textarea>
         </div>
-        
+
         <div class="modal-footer">
             <button class="button-cancel" onclick="closeModal()">Annuler</button>
             <button class="button-save" onclick="saveRecord()">Enregistrer</button>
@@ -380,7 +380,7 @@
 <div id="listeStagiairesTableModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
     <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; width: 96%; max-width: 1400px; margin: 20px auto;">
         <h2>Participants (Maximum 12)</h2>
-        
+
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
             <thead>
                 <tr style="background: #0F4761; color: white;">
@@ -397,7 +397,7 @@
             <tbody id="listeStagiairesTableBody">
             </tbody>
         </table>
-        
+
         <div style="display: flex; gap: 10px;">
             <button onclick="saveAllParticipants()" style="flex: 1; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">✓ Enregistrer</button>
             <button onclick="closeListeStagiairesTableModal()" style="flex: 1; padding: 10px; background: #ccc; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Annuler</button>
@@ -421,7 +421,7 @@ const getStatutClass = (statut) => {
 };
 
 const getDocuments = (type) => {
-    return type === 'formations' ? 
+    return type === 'formations' ?
         ['Diagnostic', 'Participants', 'Fiche Navette', 'Programme', 'Convention', 'Convocation', 'Feuille d\'émargement', 'Attestation', 'Facture', 'Facture acquitté'] :
         ['Convention', 'Offre', 'FORM 03-F', 'Synthèse', 'Émargement'];
 };
@@ -494,12 +494,12 @@ function renderDashboard() {
     let formations = data.formations.filter(f => f.utilisateur === currentUser);
     let animations = data.animations.filter(a => a.utilisateur === currentUser);
     let seminaires = data.seminaires.filter(s => s.utilisateur === currentUser);
-    
+
     let totalBilans = bilans.reduce((sum, b) => sum + (Number(b.montantTTC) || 0), 0);
     let totalFormations = formations.reduce((sum, f) => sum + (Number(f.montantTTC) || 0), 0);
     let totalAnimations = animations.reduce((sum, a) => sum + (Number(a.montantTTC) || 0), 0);
     let totalSeminaires = seminaires.reduce((sum, s) => sum + (Number(s.montantTTC) || 0), 0);
-    
+
     document.getElementById('dashboardContent').innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
             <div style="background: white; padding: 20px; border-radius: 4px; text-align: center;">
@@ -561,7 +561,7 @@ function generateDoc(type, clientId, docName) {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxyb2Q1aXPgptQwLBJ6GzLADtwA6XsIg0oG3wgJ-ilYFUTTKH_m3r1aXMyR9xeR1R_vkg/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec";
 
     const clientData = {
         clientName: record.clientName,
@@ -611,23 +611,23 @@ function cycleDocStatus(type, clientId, docName) {
     if (!record) return;
 
     if (!record.documents) record.documents = {};
-    
+
     const states = ['À générer', 'Généré', 'Envoyé', 'Signé'];
     const current = record.documents[docName] || 'À générer';
     const idx = states.indexOf(current);
-    
+
     // Si déjà "Signé", ne pas continuer (arrêt du cyclage)
     if (current === 'Signé') {
         return;
     }
-    
+
     const nextState = states[(idx + 1) % states.length];
-    
+
     // Si on passe à "Généré", appeler le script
     if (nextState === 'Généré' && current === 'À générer') {
         generateDoc(type, clientId, docName);
     }
-    
+
     record.documents[docName] = nextState;
     saveData();
     renderTable(type);
@@ -639,16 +639,16 @@ function renderTable(type) {
     const records = data[type];
     const container = document.getElementById(type + 'Table');
     const docs = getDocuments(type);
-    
+
     const userRecords = records.filter(r => !r.utilisateur || r.utilisateur === currentUser);
-    
+
     if (!userRecords.length) {
         container.innerHTML = '<p>Aucune donnée</p>';
         return;
     }
-    
+
     let html = '<table style="overflow-x: auto;"><tr>';
-    
+
     if (type === 'formations') {
         html += '<th>Entreprise</th><th>Nom du Client</th><th>Type de prestation</th><th>Montant HT</th><th>Montant TTC</th><th>Responsable</th><th>Statut</th><th style="font-size: 11px;">Fiche Client</th>';
         docs.forEach(doc => {
@@ -661,15 +661,15 @@ function renderTable(type) {
         });
         html += '<th>Email</th>';
     }
-    
+
     html += '<th>Actions</th></tr>';
-    
+
     // --- Regroupement par entreprise (formations uniquement) ---
     let listeAffichee = userRecords;
     if (type === 'formations') {
         const groupes = {};
         userRecords.forEach(r => {
-            const cle = (r.entreprise || '\u2014').trim();
+            const cle = (r.entreprise || '—').trim();
             if (!groupes[cle]) groupes[cle] = [];
             groupes[cle].push(r);
         });
@@ -682,8 +682,8 @@ function renderTable(type) {
             const total = lignes.reduce((acc, x) => acc + (Number(x.montantTTC) || 0), 0);
             html += '<tr class="groupe-entreprise" onclick="toggleGroupe(\'' + idGroupe + '\')" style="cursor: pointer; background: #0F4761; color: white;">';
             html += '<td colspan="' + nbCols + '" style="padding: 10px; font-weight: 700;">';
-            html += (ouvert ? '\u25bc ' : '\u25b6 ') + cle;
-            html += ' <span style="font-weight: 400; opacity: 0.85;">\u2014 ' + lignes.length + ' prestation' + (lignes.length > 1 ? 's' : '') + ' \u2014 ' + total + '\u20ac TTC</span>';
+            html += (ouvert ? '▼ ' : '▶ ') + cle;
+            html += ' <span style="font-weight: 400; opacity: 0.85;">— ' + lignes.length + ' prestation' + (lignes.length > 1 ? 's' : '') + ' — ' + total + '€ TTC</span>';
             html += '</td></tr>';
             if (ouvert) lignes.forEach(r => { r.__grp = idGroupe; listeAffichee.push(r); });
         });
@@ -691,7 +691,7 @@ function renderTable(type) {
 
     listeAffichee.forEach(r => {
         html += '<tr>';
-        
+
         if (type === 'formations') {
             html += '<td>' + (r.entreprise || '—') + '</td>';
             html += '<td>' + r.clientName + '</td>';
@@ -700,7 +700,7 @@ function renderTable(type) {
             html += '<td style="text-align: right;">' + r.montantTTC + '€</td>';
             html += '<td><span style="display: inline-block; background: ' + (r.utilisateur === 'Edwige' ? '#F37322' : '#8b5a8e') + '; color: white; padding: 4px 8px; border-radius: 2px; font-size: 11px; font-weight: 600;">' + (r.utilisateur || 'Edwige') + '</span></td>';
             html += '<td><span class="statut-badge ' + getStatutClass(r.statut) + '">' + r.statut + '</span></td>';
-            
+
             // Bouton Fiche Client
             html += '<td style="text-align: center;"><button class="btn-doc" onclick="openFicheClientModal(\'' + type + '\', ' + r.id + ')" style="background: #E91E63; color: white; border: none; padding: 6px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600;">Fiche</button></td>';
 
@@ -734,7 +734,7 @@ function renderTable(type) {
             html += '<td>' + r.montantTTC + '€</td>';
             html += '<td><span style="display: inline-block; background: ' + (r.utilisateur === 'Edwige' ? '#F37322' : '#8b5a8e') + '; color: white; padding: 4px 8px; border-radius: 2px; font-size: 11px; font-weight: 600;">' + (r.utilisateur || 'Edwige') + '</span></td>';
             html += '<td><span class="statut-badge ' + getStatutClass(r.statut) + '">' + r.statut + '</span></td>';
-            
+
             docs.forEach(doc => {
                 const status = (r.documents && r.documents[doc]) || 'À générer';
                 const bgColor = getDocStatusColor(status);
@@ -742,20 +742,20 @@ function renderTable(type) {
                 html += '<button class="btn-doc" onclick="cycleDocStatus(\'' + type + '\', ' + r.id + ', \'' + doc + '\')" style="background: ' + bgColor + '; color: white; border: none; padding: 6px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: 600; min-width: 70px;">' + status + '</button>';
                 html += '</td>';
             });
-            
+
             html += '<td style="font-size: 11px;">';
             if (r.email) html += r.email + '<br>';
             if (r.email2) html += r.email2;
             html += '</td>';
         }
-        
+
         html += '<td>';
         html += '<button class="btn-edit" onclick="editRecord(\'' + type + '\', ' + r.id + ')">✎</button> ';
         html += '<button class="btn-edit" onclick="duplicateRecord(\'' + type + '\', ' + r.id + ')" title="Nouvelle prestation pour ce client" style="background: #9C27B0;">⧉</button> ';
         html += '<button class="btn-delete" onclick="deleteRecord(\'' + type + '\', ' + r.id + ')">✕</button>';
         html += '</td></tr>';
     });
-    
+
     html += '</table>';
     container.innerHTML = html;
 }
@@ -795,12 +795,12 @@ function showAddClientModal() {
 function editRecord(type, id) {
     editingType = type;
     editingRecord = data[type].find(r => r.id === id);
-    
+
     if (!editingRecord) {
         alert('Erreur : enregistrement non trouvé');
         return;
     }
-    
+
     document.getElementById('modalTitle').innerText = 'Modifier Client';
     document.getElementById('editClientName').value = editingRecord.clientName || '';
     document.getElementById('editSIRET').value = editingRecord.SIRET || '';
@@ -821,7 +821,7 @@ function editRecord(type, id) {
     document.getElementById('editStatut').value = editingRecord.statut || 'Prospect';
     document.getElementById('editNotes').value = editingRecord.notes || '';
     document.getElementById('editQuantiteParticipants').value = editingRecord.quantiteParticipants || '';
-    
+
     toggleExtraFields();
     document.getElementById('editModal').classList.add('active');
 }
@@ -834,10 +834,10 @@ let currentListeStagiairesClientId = null;
 
 function showListeStagiairesTableModal(clientId) {
     currentListeStagiairesClientId = clientId;
-    
+
     // Récupérer les participants existants pour ce client
     const existingParticipants = data.listeStagiaires ? data.listeStagiaires.filter(p => p.clientId === clientId) : [];
-    
+
     // Générer 12 lignes
     let html = '';
     for (let i = 0; i < 12; i++) {
@@ -854,7 +854,7 @@ function showListeStagiairesTableModal(clientId) {
             <td style="padding: 4px; border: 1px solid #ddd;"><input type="text" id="listeStagiaire_amenagement_${i}" value="${existing.amenagement || ''}" autocomplete="new-password" style="${st}"></td>
         </tr>`;
     }
-    
+
     document.getElementById('listeStagiairesTableBody').innerHTML = html;
     document.getElementById('listeStagiairesTableModal').style.display = 'flex';
 }
@@ -868,15 +868,15 @@ function saveAllParticipants() {
     if (!data.listeStagiaires) {
         data.listeStagiaires = [];
     }
-    
+
     // Supprimer les anciens participants pour ce client
     data.listeStagiaires = data.listeStagiaires.filter(p => p.clientId !== currentListeStagiairesClientId);
-    
+
     // Ajouter les nouveaux participants
     for (let i = 0; i < 12; i++) {
         const g = (c) => document.getElementById(`listeStagiaire_${c}_${i}`).value.trim();
         const name = g('name');
-        
+
         if (name) {
             data.listeStagiaires.push({
                 id: 'listeStagiaire_' + currentListeStagiairesClientId + '_' + i,
@@ -892,7 +892,7 @@ function saveAllParticipants() {
             });
         }
     }
-    
+
     saveData();
     renderTable('formations');
     closeListeStagiairesTableModal();
@@ -907,7 +907,7 @@ function saveAndGenerateAllDocs() {
     for (let i = 0; i < 12; i++) {
         const g = (c) => document.getElementById(`listeStagiaire_${c}_${i}`).value.trim();
         const name = g('name');
-        
+
         if (name) {
             data.listeStagiaires.push({
                 id: 'listeStagiaire_' + currentListeStagiairesClientId + '_' + i,
@@ -924,14 +924,14 @@ function saveAndGenerateAllDocs() {
         }
     }
     saveData();
-    
+
     // Générer SEULEMENT les docs qui ont un templateId configuré
     const docsAvecTemplate = Object.keys(docTemplateMap).filter(doc => docTemplateMap[doc] && doc !== 'Participants');
-    
+
     docsAvecTemplate.forEach(docName => {
         generateDoc('formations', currentListeStagiairesClientId, docName);
     });
-    
+
     // Mettre tous les statuts à "Généré"
     const record = data.formations.find(r => r.id === currentListeStagiairesClientId);
     if (record) {
@@ -940,7 +940,7 @@ function saveAndGenerateAllDocs() {
             record.documents[docName] = 'Généré';
         });
     }
-    
+
     saveData();
     renderTable('formations');
     closeListeStagiairesTableModal();
@@ -966,12 +966,12 @@ function saveRecord() {
     const statut = document.getElementById('editStatut').value;
     const notes = document.getElementById('editNotes').value.trim();
     const quantiteParticipants = document.getElementById('editQuantiteParticipants').value.trim();
-    
+
     if (!name || !prestationType) {
         alert('Nom et Type sont obligatoires');
         return;
     }
-    
+
     if (editingRecord) {
         editingRecord.clientName = name;
         editingRecord.SIRET = SIRET;
@@ -994,7 +994,7 @@ function saveRecord() {
         editingRecord.quantiteParticipants = quantiteParticipants;
         renderTable(editingType);
     } else {
-        const guessType = prestationType.toLowerCase().includes('bilan') ? 'bilans' : 
+        const guessType = prestationType.toLowerCase().includes('bilan') ? 'bilans' :
                          prestationType.toLowerCase().includes('animation') ? 'animations' : 'formations';
         const newId = Date.now();
         data[guessType].push({
@@ -1024,7 +1024,7 @@ function saveRecord() {
         });
         renderTable(guessType);
     }
-    
+
     saveData();
     closeModal();
     renderDashboard();
@@ -1085,7 +1085,7 @@ function triggerImport() {
 function importData(event) {
     const file = event.target.files[0];
     if (!file) return;
-    
+
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -1108,7 +1108,7 @@ let currentFicheClientId = null;
 function openFicheClientModal(type, id) {
     const record = data[type].find(r => r.id === id);
     if (!record) return;
-    
+
     currentFicheClientId = id;
     document.getElementById('fcClientName').value = record.clientName || '';
     document.getElementById('fcEntreprise').value = record.entreprise || '';
@@ -1130,12 +1130,12 @@ function openFicheClientModal(type, id) {
     document.getElementById('fcContact2').value = record.contact2 || '';
     document.getElementById('fcEmail2').value = record.email2 || '';
     document.getElementById('fcTelephone2').value = record.telephone2 || '';
-    
+
     // Formateur auto-rempli avec user actuel
     document.getElementById('fcFormateur').value = currentUser || 'Edwige';
     document.getElementById('fcEmailFormateur').value = getFormateur().email;
     document.getElementById('fcTelephoneFormateur').value = getFormateur().telephone;
-    
+
     document.getElementById('ficheClientModal').classList.add('active');
 }
 
@@ -1179,12 +1179,12 @@ function generateFicheClient() {
     record.contact2 = document.getElementById('fcContact2').value;
     record.email2 = document.getElementById('fcEmail2').value;
     record.telephone2 = document.getElementById('fcTelephone2').value;
-    
+
     // Sauvegarder
     saveData();
     renderTable('formations');
     closeFicheClientModal();
-    alert('\u2713 Fiche client enregistr\u00e9e');
+    alert('✓ Fiche client enregistrée');
     return;
 
     // Envoyer au script pour générer la Fiche Client
@@ -1195,7 +1195,7 @@ function generateFicheClient() {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxyb2Q1aXPgptQwLBJ6GzLADtwA6XsIg0oG3wgJ-ilYFUTTKH_m3r1aXMyR9xeR1R_vkg/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec";
 
     const clientData = {
         clientName: record.clientName,
@@ -1218,7 +1218,7 @@ function generateFicheClient() {
         quantiteParticipants: record.quantiteParticipants || '',
         listeStagiaires: getParticipantsOnly(currentFicheClientId)
     };
-    
+
     console.log('📤 DONNÉES ENVOYÉES AU SCRIPT:', clientData);
     console.log('📄 DOC:', 'Fiche Client');
     console.log('🔑 TEMPLATE ID:', templateId);
@@ -1256,17 +1256,17 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTable('formations');
     renderTable('animations');
     renderTable('seminaires');
-    
+
     // Listener pour afficher/masquer champs extras
     document.getElementById('editPrestationType').addEventListener('change', toggleExtraFields);
     document.getElementById('editPrestationType').addEventListener('input', toggleExtraFields);
-    
+
     // Bloquer autocomplete Fiche Client
     const ficheClientInputs = [
-        'fcClientName', 'fcEntreprise', 'fcEmail1', 'fcTelephone1', 
+        'fcClientName', 'fcEntreprise', 'fcEmail1', 'fcTelephone1',
         'fcContact2', 'fcEmail2', 'fcTelephone2', 'fcAdressePostale'
     ];
-    
+
     ficheClientInputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -1280,7 +1280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxyb2Q1aXPgptQwLBJ6GzLADtwA6XsIg0oG3wgJ-ilYFUTTKH_m3r1aXMyR9xeR1R_vkg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
