@@ -499,6 +499,8 @@ function saveData() {
     } catch (e) {
         console.warn('localStorage indisponible (Safari mode privé?):', e);
     }
+    // Sync avec Google Sheets
+    syncDataToSheet();
 }
 
 function loadData() {
@@ -508,6 +510,50 @@ function loadData() {
     } catch (e) {
         console.warn('Impossible de charger les données:', e);
     }
+}
+
+function loadDataFromSheet() {
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec?operation=readData";
+
+    fetch(scriptUrl, { method: 'GET' })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success && result.data) {
+            data = result.data;
+            try {
+                localStorage.setItem('el-energie-crm-data-v2', JSON.stringify(data));
+            } catch (e) {
+                console.warn('localStorage indisponible');
+            }
+            console.log('✓ Données chargées depuis Google Sheets');
+            renderDashboard();
+            renderTable('bilans');
+            renderTable('formations');
+            renderTable('animations');
+            renderTable('seminaires');
+        }
+    })
+    .catch(err => {
+        console.warn('⚠️ Sync Sheets échouée, utilisant localStorage:', err);
+    });
+}
+
+function syncDataToSheet() {
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec";
+
+    fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ operation: 'writeData', data: data })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            console.log('✓ Données synchronisées vers Google Sheets');
+        }
+    })
+    .catch(err => {
+        console.warn('⚠️ Sync Sheets échouée:', err);
+    });
 }
 
 function renderDashboard() {
@@ -582,7 +628,7 @@ function generateDoc(type, clientId, docName) {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec";
 
     const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
@@ -1232,7 +1278,7 @@ function generateFicheClient() {
         return;
     }
 
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec";
 
     const infosFormatrice = formatrices[currentUser] || {};
     const clientData = {
@@ -1308,6 +1354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.content')?.insertBefore(warning, document.querySelector('.content').firstChild);
     }
     loadData();
+    loadDataFromSheet(); // Charger depuis Google Sheets (sync)
     applyUserColors();
     renderDashboard();
     renderTable('bilans');
@@ -1338,7 +1385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // ===== DIAGNOSTIC GENERATION =====
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzetEhViBA-AX5wLBo6Y0iFAJXmYOyW-lPwRgQH4vMGtRonp2wcGRLD3m9m3wF8SulgA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcIagR0-lBeUXFDXXKVHQdU5o0Z7NKQ6ebaA4TZwGjCr9UMe9YBEaCG6puz2MWUpkbjA/exec';
 async function generateDiagnosticFromCRM(formation) {
   const payload = {action: 'generateDiagnostic', clientData: {intitule_formation: formation.prestationType || '', date_debut: formation.dateDebut || '', date_fin: formation.dateFin || '', prenom_nom: formation.clientName || '', entreprise: formation.entreprise || '', adresse: formation.adressePostale || '', montant_ht: formation.montantHT || '0', montant_ttc: formation.montantTTC || '0', responsable: formation.utilisateur || currentUser || 'Edwige'}};
   try {const response = await fetch(APPS_SCRIPT_URL, {method: 'POST', body: JSON.stringify(payload)}); const result = await response.json(); if (result.success) {alert('✓ Diagnostic généré!\n\n' + result.url); window.open(result.url, '_blank');} else {alert('❌ Erreur: ' + result.error);}} catch (err) {alert('❌ Erreur: ' + err.toString());}
